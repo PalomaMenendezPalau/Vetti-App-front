@@ -5,10 +5,10 @@ import { Href, Link } from "expo-router";
 export default function Index() {
   return (
     <View className="flex-1 items-center justify-center bg-white">
-      <Text >Vetti</Text>
+      <Text className="text-3xl font-pblack" >Vetti App!</Text>
       <StatusBar style="auto" />
-      <Link href={"/profile" as Href<string | object>}>
-        Go to profile
+      <Link href={"/home" as Href<string | object>}>
+        Home
       </Link>
     </View>
   );
