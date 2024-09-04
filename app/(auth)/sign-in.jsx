@@ -14,7 +14,9 @@ const SignIn = () => {
                     className="w-[115px] h-[35pc]"
                 />
                 <Text className="text-2xl text-white text-semibold  font-psemibold">Accede a tu cuenta</Text>
-                <FormField/>
+                <FormField
+                    
+                />
             </View>
         </ScrollView>
     </SafeAreaView>

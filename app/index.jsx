@@ -50,7 +50,8 @@ export default function Index() {
                 />
             
           </View>
-          <Text className="text-sm font-pregular text-white mt-2 text-center"> © 2024 Vetii App. Todos los derechos reservados. </Text>
+       
+          <Text className="text-sm font-pregular text-white text-center"> © 2024 Vetii App. Todos los derechos reservados. </Text>
         </ScrollView>
         <StatusBar backgroundColor="#161622" style="light"/>
     </SafeAreaView>
