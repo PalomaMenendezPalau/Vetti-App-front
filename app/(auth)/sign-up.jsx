@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CustomButton, FormField, images } from '../../constants';
 import { Link } from 'expo-router';
-import { createUser } from '../../src/users_api'; // Adjust the path according to your project structure
+import { createUser } from '../../utils/users_api'; // Adjust the path according to your project structure
 
 const SignUp = () => {
   // State for form fields
@@ -13,6 +13,7 @@ const SignUp = () => {
     email: '',
     password: '',
     phoneNumber: '',
+    role: '1',
   });
 
   // State for loading and error handling
@@ -40,6 +41,7 @@ const SignUp = () => {
         email: '',
         password: '',
         phoneNumber:'',
+        role:'1',
       }); // Reset form
     } catch (error) {
       // Handle error and show message to the user
