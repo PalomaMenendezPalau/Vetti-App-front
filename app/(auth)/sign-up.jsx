@@ -10,9 +10,10 @@ const SignUp = () => {
   const [form, setForm] = useState({
     name: '',
     lastName: '',
+    dni: '',
     email: '',
-    password: '',
     phoneNumber: '',
+    password: '',
     role: '1',
   });
 
@@ -21,9 +22,9 @@ const SignUp = () => {
 
   // Handle form submission
   const submit = async () => {
-    const { name, lastName, email, password, phoneNumber } = form;
+    const { name, lastName, dni, email, phoneNumber , password, role} = form;
 
-    if (!name || !lastName || !email || !password || !phoneNumber) {
+    if (!name || !lastName || !dni || !email || !password || !phoneNumber ) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
       return;
     }
@@ -31,16 +32,17 @@ const SignUp = () => {
     try {
       setIsLoading(true); // Set loading state to true
       // Call the createUser function with form data
-      const response = await createUser(name, lastName, password, email, phoneNumber)
+      const response = await createUser(name, lastName, dni, email, phoneNumber, password, role)
 
       // Show success message to the user
       Alert.alert('Éxito', 'Usuario creado exitosamente');
       setForm({
         name: '',
         lastName: '',
+        dni:'',
         email: '',
-        password: '',
         phoneNumber:'',
+        password: '',
         role:'1',
       }); // Reset form
     } catch (error) {
@@ -78,6 +80,14 @@ const SignUp = () => {
             handleChangeText={(e) => setForm({ ...form, lastName: e })}
             otherStyles="mt-2"
           />
+
+          <FormField
+            title="DNI"
+            placeholder="40011765"
+            value={form.dni}
+            handleChangeText={(e) => setForm({ ...form, dni: e })}
+            otherStyles="mt-2"
+          /> 
 
           <FormField
             title="Email"
