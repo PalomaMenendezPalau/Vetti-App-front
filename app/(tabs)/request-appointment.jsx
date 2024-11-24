@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, Linking } from 'react-native';
 
-const OpenCalendly = () => {
+const RequestAppointment = () => {
   const openCalendly = () => {
     Linking.openURL('https://calendly.com/luzzijuanma');
   };
@@ -14,4 +14,4 @@ const OpenCalendly = () => {
   );
 };
 
-export default OpenCalendly;
+export default RequestAppointment;
