@@ -37,7 +37,7 @@ export const signInUser = async (email, password) => {
     console.log('API response:', response.data);
 
     // Check if the response is successful based on the message or statusCode
-    if (response.data.message === 'Success' && response.data.statusCode === 200) {
+    if (response.data.statusCode === 200) {
       // You may want to store other user data like the user ID if token is not available
       const { id, role } = response.data;
 

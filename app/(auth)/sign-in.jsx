@@ -31,6 +31,8 @@ const SignIn = () => {
       // Show an alert in case of an error
       Alert.alert('Error', error.response ? error.response.data.message : 'Login failed. Please try again.');
       console.error('Login error:', error);
+      console.log("Request URL:", url);
+      console.log("Request Body:", JSON.stringify(requestBody));
     } finally {
       setIsLoading(false);
     }

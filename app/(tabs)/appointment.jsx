@@ -29,7 +29,7 @@ const Appointment = () => {
             <Text className="text-m font-pmedium  text-white">{appointment.date}</Text>
             <Text className="text-xs text-white">{appointment.location}</Text>
             <TouchableOpacity className="mt-4">
-              <Text className="text-red-500 font-pbold">Cancelar turno</Text>
+              <Text className="text-red-500 font-pbold shadow">Cancelar turno</Text>
             </TouchableOpacity>
           </View>
         ))}
