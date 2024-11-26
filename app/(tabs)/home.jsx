@@ -1,18 +1,46 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
+
+import { View, Text, FlatList, Image, TouchableOpacity , ActivityIndicator} from 'react-native';
+import {React , useState, useEffect }from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 // Assuming you have icons for each button
-import { icons, images, HomeCarousel } from '../../constants'; // Assuming your icons are stored here
-
+import { icons, images } from '../../constants'; // Assuming your icons are stored here
+import { fetchUserDetails } from '../../utils/users_api'; 
 
 
 const Home = () => {
-  const navigation = useNavigation(); 
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigation = useNavigation(); 
+
+      // Fetch user details when the component mounts
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const userDetails = await fetchUserDetails();
+        setUser(userDetails);
+      } catch (error) {
+        console.error('Failed to fetch user details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserDetails();
+  }, []);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading user details...</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView className="bg-gray-800 h-full">
       <FlatList 
-        data={[{id: 1}]}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <Text className='text-3xl'>{item.id}</Text>
@@ -25,7 +53,7 @@ const Home = () => {
                   Hola!
                 </Text>
                 <Text className="font-psemibold text-2xl  text-white">
-                  Paloma
+                {user ? user.name : 'User'}
                 </Text>
               </View>
               <View className="mt-1.5 items-center justify-center">

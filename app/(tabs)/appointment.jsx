@@ -7,7 +7,7 @@ const Appointment = () => {
   const navigation = useNavigation(); 
   return (
     <View className="flex-1 bg-gray-800">
-     
+     <Text className="text-2xl font-psemibold shadow-1 text-center text-white mt-5  mb-5">Turnos Agendados</Text>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 8 }}>
         {[
           {

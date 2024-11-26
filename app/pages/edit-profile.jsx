@@ -1,41 +1,54 @@
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
-import { fetchUserDetails, updateUserDetails } from '../../utils/users_api'; // Replace with your actual API functions
+import { fetchUserDetails, updateUser } from '../../utils/users_api'; // Adjust import paths if needed
+import { getUserData } from '../../utils/storage'; // Adjust import paths if needed
 
 const EditProfile = () => {
   const [user, setUser] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    location: '',
+    district: '',
+    address: '',
   });
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userId, setUserId] = useState(null); // State to store user ID
   const navigation = useNavigation();
 
-  // Fetch user details when the component mounts
+  // Fetch user details and user ID when the component mounts
   useEffect(() => {
-    const getUserDetails = async () => {
+    const initializeUserDetails = async () => {
       try {
+        // Get the user ID from AsyncStorage
+        const { userId } = await getUserData();
+        setUserId(userId); // Store userId in state
+
+        if (!userId) {
+          Alert.alert('Error', 'User ID not found.');
+          setLoading(false);
+          return;
+        }
+
+        // Fetch user details from API
         const userDetails = await fetchUserDetails();
         setUser({
           name: userDetails.name || '',
           lastName: userDetails.lastName || '',
           email: userDetails.email || '',
           phoneNumber: userDetails.phoneNumber || '',
-          location: userDetails.location || '',
+          district: userDetails.district || '',
+          address: userDetails.address || '',
         });
       } catch (error) {
         console.error('Failed to fetch user details:', error);
+        Alert.alert('Error', 'Failed to load user details.');
       } finally {
         setLoading(false);
       }
     };
 
-    getUserDetails();
+    initializeUserDetails();
   }, []);
 
   // Handle form input changes
@@ -55,7 +68,22 @@ const EditProfile = () => {
 
     try {
       setIsSubmitting(true);
-      await updateUserDetails(user); // Replace with your actual API function
+
+      if (!userId) {
+        Alert.alert('Error', 'User ID is missing.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const updatedData = {
+        district: user.district, // Assuming 'district' maps to 'address'
+        address: user.address, // Assuming 'district' maps to 'address'
+      };
+
+      console.log(`User ID sent to updateUser endpoint: ${userId}`); // Log the userId in the terminal
+      console.log('Payload sent to updateUser:', updatedData);
+
+      await updateUser(userId, updatedData); // Use the retrieved user ID
       Alert.alert('Success', 'Your profile has been updated.');
       navigation.goBack(); // Navigate back to the profile screen
     } catch (error) {
@@ -80,66 +108,44 @@ const EditProfile = () => {
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
         {/* Header */}
         <View className="flex-row justify-between items-center mt-4 mb-6">
-          <Text className="text-2xl font-pbold text-white">Editar Perfil</Text>
+          <Text className="text-2xl font-bold text-white">Editar Perfil</Text>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-lg font-psemibold  text-blue-200">Cancelar</Text>
+            <Text className="text-lg font-semibold text-blue-200">Cancelar</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Input fields for user details */}
         <View className="space-y-4">
-          <View>
-            <Text className="text-lg font-psemibold text-white">Nombre</Text>
-            <TextInput
-              value={user.name}
-              onChangeText={(text) => handleChange('name', text)}
-              placeholder="Enter your name"
-              className="bg-gray-100 p-3 rounded-lg font-plight text-white"
-            />
-          </View>
+              {user && [
+                { label: 'Nombre', value: user.name, icon: '👤' },
+                { label: 'Apellido', value: user.lastName, icon: '👥' },
+                { label: 'Mail', value: user.email, icon: '✉️' },
+                { label: 'Número de teléfono', value: user.phoneNumber, icon: '📞' }
+              ].map((item, index) => (
+                <View key={index} className="flex-row items-center">
+                  <Text className="text-gray-400 mr-4">{item.icon}</Text>
+                  <View>
+                    <Text className="text-lg font-psemibold text-white">{item.label}</Text>
+                    <Text className="font-plight text-white">{item.value}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
 
-          <View>
-            <Text className="text-lg font-psemibold text-white">Apellido</Text>
-            <TextInput
-              value={user.lastName}
-              onChangeText={(text) => handleChange('lastName', text)}
-              placeholder="Enter your last name"
-              className="bg-gray-100 p-3 rounded-lg font-plight text-white"
-            />
-          </View>
+       
+            <View >
+                <View>
+                  <Text className="text-lg font-psemibold text-white">📍   Barrio</Text>
+                      <TextInput
+                         value={user.district}
+                         onChangeText={(text) => handleChange('district', text)}
+                         placeholder="Enter your district"
+                         className="bg-gray-100 p-3 rounded-lg text-black"
+                       />
+                 </View>
+             </View>
 
-          <View>
-            <Text className="text-lg font-psemibold text-white">Email</Text>
-            <TextInput
-              value={user.email}
-              onChangeText={(text) => handleChange('email', text)}
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              className="bg-gray-100 p-3 rounded-lg font-plight text-white"
-            />
-          </View>
+             
 
-          <View>
-            <Text className="text-lg font-psemibold text-white">Número de Teléfono</Text>
-            <TextInput
-              value={user.phoneNumber}
-              onChangeText={(text) => handleChange('phoneNumber', text)}
-              placeholder="Enter your phone number"
-              keyboardType="phone-pad"
-              className="bg-gray-100 p-3 rounded-lg font-plight text-white"
-            />
-          </View>
-
-          <View>
-            <Text className="text-lg font-psemibold text-white">Barrio</Text>
-            <TextInput
-              value={user.location}
-              onChangeText={(text) => handleChange('location', text)}
-              placeholder="Enter your location"
-              className="bg-gray-100 p-3 rounded-lg font-plight text-white"
-            />
-          </View>
-        </View>
 
         {/* Submit button */}
         <TouchableOpacity
@@ -157,3 +163,4 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
+
