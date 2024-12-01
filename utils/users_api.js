@@ -39,16 +39,18 @@ export const signInUser = async (email, password) => {
     // Check if the response is successful based on the message or statusCode
     if (response.data.statusCode === 200) {
       // You may want to store other user data like the user ID if token is not available
-      const { id, role } = response.data;
+      const { id, role , email } = response.data;
+     
 
       // Store the user data or other info if needed
       await AsyncStorage.setItem('user_id', JSON.stringify(id));
-      if (role) {
+      if (role && email) {
         await AsyncStorage.setItem('user_role', role);
+        await AsyncStorage.setItem('user_email', email);
       }
 
       // Return the user data or other response info
-      return { id, role };
+      return { id, role , email };
     } else {
       throw new Error('Login failed: Invalid credentials or response format');
     }
@@ -125,6 +127,32 @@ export const addPet = async (name, type) => {
     return response.data;
   } catch (error) {
     console.error('Error adding pet:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error
+  }
+};
+
+
+// Function to fetch active appointments for the logged-in user
+export const getActiveAppointments = async () => {
+  try {
+    // Retrieve the user email from storage
+    const { userEmail } = await getUserData();
+
+    if (!userEmail) {
+      throw new Error('User email not found in storage.');
+    }
+
+    // Construct the endpoint
+    const endpoint = `/calendly/user/appointments/${userEmail}?status=active`;
+
+    // Make the GET request to fetch active appointments
+    const response = await api.get(endpoint);
+
+    // Log and return the response
+    console.log('Active Appointments:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching active appointments:', error.response ? error.response.data : error.message);
     throw error; // Handle or propagate the error
   }
 };

@@ -73,6 +73,9 @@ const Profile = () => {
           <Text className="mt-4 text-2xl font-psemibold text-white">
             {user ? `${user.name} ${user.lastName}` : 'User'}
           </Text>
+          <View className="size-1 mt-2 font-pbold border rounded-full border-amber-950 bg-red-900">
+                <Button title="Cerrar Sesion" onPress={handleLogout} color="#FF4D4D" />
+            </View>
         </View>
 
         {/* Tabs */}
@@ -124,9 +127,6 @@ const Profile = () => {
             <Pets /> 
           )}
 
-            <View className="mt-4">
-                <Button title="Log Out" onPress={handleLogout} color="#FF4D4D" />
-            </View>
         </View>
         
       </ScrollView>
