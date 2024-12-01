@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator,Button ,Alert} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 import Pets from '../pages/pets';
 import { fetchUserDetails } from '../../utils/users_api';
 import {images, icons } from '../../constants'; 
 import { useNavigation } from '@react-navigation/native';
+import { clearUserData } from '../../utils/storage'; // Importing logout functionality
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState('personalInfo');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    try {
+      await clearUserData(); // Clear session data
+      Alert.alert('Logged Out', 'You have been successfully logged out.');
+      navigation.replace('index'); // Navigate to the login screen
+    } catch (error) {
+      console.error('Error during logout:', error);
+      Alert.alert('Error', 'An error occurred while logging out.');
+    }
+  };
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -111,10 +123,16 @@ const Profile = () => {
           ) : (
             <Pets /> 
           )}
+
+            <View className="mt-4">
+                <Button title="Log Out" onPress={handleLogout} color="#FF4D4D" />
+            </View>
         </View>
+        
       </ScrollView>
     </SafeAreaView>
-  );
+  
+);
 };
 
 export default Profile;

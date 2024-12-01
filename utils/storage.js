@@ -22,3 +22,4 @@ export const clearUserData = async () => {
     console.error('Error clearing user data:', error);
   }
 };
+

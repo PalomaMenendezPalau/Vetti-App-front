@@ -57,6 +57,7 @@ export const signInUser = async (email, password) => {
     throw error; // Handle or throw the error for further action
   }
 };
+
 // Function to fetch user details using the stored user ID
 export const fetchUserDetails = async () => {
   try {
@@ -98,5 +99,32 @@ export const updateUser = async (userId, updatedData) => {
   } catch (error) {
     console.error('Error updating user:', error.response ? error.response.data : error.message);
     throw error; // Handle or throw the error for further action
+  }
+};
+
+// Function to add a pet for a specific user
+export const addPet = async (name, type) => {
+  try {
+    // Retrieve the user ID from storage
+    const { userId } = await getUserData();
+
+    if (!userId) {
+      throw new Error('User ID not found in storage.');
+    }
+
+    // Sending POST request to add a new pet
+    const response = await api.post(`/pets/addPet/${userId}`, {
+      name,
+      type,
+    });
+
+    // Log the response for debugging purposes
+    console.log('Pet added successfully:', response.data);
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    console.error('Error adding pet:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error
   }
 };

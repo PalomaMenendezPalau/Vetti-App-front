@@ -139,7 +139,16 @@ const EditProfile = () => {
                          value={user.district}
                          onChangeText={(text) => handleChange('district', text)}
                          placeholder="Enter your district"
-                         className="bg-gray-100 p-3 rounded-lg text-black"
+                         className="bg-gray-100 p-3 rounded-lg font-plight text-white"
+                       />
+                 </View>
+                 <View>
+                  <Text className="text-lg font-psemibold text-white">📍   Direccion</Text>
+                      <TextInput
+                         value={user.address}
+                         onChangeText={(text) => handleChange('address', text)}
+                         placeholder="Enter your address"
+                         className="bg-gray-100 p-3 rounded-lg font-plight text-white"
                        />
                  </View>
              </View>

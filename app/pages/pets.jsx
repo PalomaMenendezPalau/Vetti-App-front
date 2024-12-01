@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 
+
 const Pets = () => {
   // Example list of pets
   const pets = [
@@ -35,7 +36,7 @@ const Pets = () => {
         {/* Header */}
         <View className="w-full px-4 flex-row justify-between items-center -mt-">
           <Text className="text-xl font-semibold text-white">Mis Mascotas</Text>
-          <Link href="../pages/pets" className='px-4 py-2 rounded-full bg-gray-200'
+          <Link href="../pages/add-pets" className='px-4 py-2 rounded-full bg-gray-200'
             >
             <Text className='font-pmedium text-gray-600'>
               Agregar
