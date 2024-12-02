@@ -13,6 +13,8 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import calendar from "../assets/icons/calendar.png";
 import pets from "../assets/icons/pets.png";
+import vaccine from "../assets/icons/vaccine.png"
+import emergencyroom from "../assets/icons/emergency-room.png"
 
 export default {
   play,
@@ -30,4 +32,6 @@ export default {
   eye,
   calendar,
   pets,
+  vaccine,
+  emergencyroom
 };

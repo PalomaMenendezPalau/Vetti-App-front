@@ -50,7 +50,7 @@ const TabsLayout = () => {
           }}
         />
          <Tabs.Screen
-          name="request-appointment"
+          name="vets"
           options={{
             title: 'Solicitar Turno', 
             headerShown: 'false',
@@ -99,6 +99,7 @@ const TabsLayout = () => {
         />
         
       </Tabs>
+      
       
     </> 
   )

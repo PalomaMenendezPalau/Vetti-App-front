@@ -7,7 +7,7 @@ export const getUserData = async () => {
     const userRole = await AsyncStorage.getItem('user_role');
     const userEmail = await AsyncStorage.getItem('user_email');
     
-    return { userId, userRole ,userEmail }; // Return the retrieved user data
+    return { userId, userRole, userEmail }; // Return the retrieved user data
   } catch (error) {
     console.error('Error retrieving user data:', error);
   }
@@ -25,3 +25,34 @@ export const clearUserData = async () => {
   }
 };
 
+// Function to save vet data into local storage
+export const saveVetData = async (vetData) => {
+  try {
+    // Convert the vet data to a JSON string and save it
+    await AsyncStorage.setItem('vet_data', JSON.stringify(vetData));
+    console.log('Vet data saved successfully.');
+  } catch (error) {
+    console.error('Error saving vet data:', error);
+  }
+};
+
+// Function to retrieve the vet data from local storage
+export const getVetData = async () => {
+  try {
+    const vetData = await AsyncStorage.getItem('vet_data');
+    return vetData ? JSON.parse(vetData) : null; // Parse and return the data if found
+  } catch (error) {
+    console.error('Error retrieving vet data:', error);
+    return null;
+  }
+};
+
+// Function to clear vet data
+export const clearVetData = async () => {
+  try {
+    await AsyncStorage.removeItem('vet_data');
+    console.log('Vet data cleared.');
+  } catch (error) {
+    console.error('Error clearing vet data:', error);
+  }
+};

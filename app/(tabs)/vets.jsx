@@ -1,0 +1,51 @@
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { Link, useRouter } from 'expo-router'; 
+import { icons, images } from '../../constants'; // Assuming your icons are stored here
+
+const Vets = () => {
+  const navigation = useNavigation(); 
+  const router = useRouter();
+  const options = [
+    { title: 'Especialidades Veterinarias', icon: icons.pets},
+    { title: 'Estudios', icon: icons.search },
+    { title: 'Vacunatorios', icon: icons.vaccine },
+    { title: 'Guardias', icon: icons.emergencyroom },
+  ];
+
+  return (
+    <SafeAreaView className="bg-gray-800 h-full">
+      {/* Header */}
+      <View className="flex-row items-center justify-between px-4 ">
+        <TouchableOpacity onPress={() => navigation.jumpTo('home')}>
+          <Text className="text-base font-pmedium text-white">{'<'}</Text>
+        </TouchableOpacity>
+        <Text className="font-pregular text-xl text-gray-100 text-white">Nuevo turno</Text>
+        <View />
+      </View>
+
+      {/* Options */}
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        {options.map((option, index) => (
+          <TouchableOpacity onPress={() => router.push('../pages/view-vets')}
+            key={index}
+            className="flex-row items-center justify-between rounded-lg p-4 mb-4 shadow-md bg-gray-600"
+          >
+            <View className="flex-row items-center space-x-4">
+            <Image source={option.icon} 
+                className="w-10 h-10 mt-2" 
+                resizeMode="contain"
+                />
+              <Text className="text-lg  text-white font-pmedium">{option.title}</Text>
+            </View>
+            <Text className="text-lg font-pmedium text-white">{'>'}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default Vets;
