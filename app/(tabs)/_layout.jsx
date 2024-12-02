@@ -27,7 +27,7 @@ const TabsLayout = () => {
           tabBarShowLabel:false,
           tabBarStyle: {
             backgroundColor: '#f2f3f4',
-            borderTopWidth: 1,
+            borderTopWidth: 16,
             borderTopColor: '#e5e7e9',
             height: 84
           }
@@ -50,7 +50,7 @@ const TabsLayout = () => {
           }}
         />
          <Tabs.Screen
-          name="request-appointment"
+          name="vets"
           options={{
             title: 'Solicitar Turno', 
             headerShown: 'false',
@@ -99,6 +99,7 @@ const TabsLayout = () => {
         />
         
       </Tabs>
+      
       
     </> 
   )

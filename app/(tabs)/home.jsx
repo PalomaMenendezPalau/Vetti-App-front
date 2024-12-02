@@ -69,7 +69,7 @@ const Home = () => {
             <View className="flex-row flex-wrap justify-between mt-5">
               {/* First Row */}
               <TouchableOpacity className="w-[48%] bg-gray-600 rounded-xl p-5 mb-4 items-center shadow-md"
-               onPress={() => navigation.jumpTo('request-appointment')}>
+               onPress={() => navigation.jumpTo('vets')}>
                 <Text className="text-lg font-psemibold text-white">Solicitar turno</Text>
                 <Text className="text-sm font-pmedium text-center text-white">Agendá un turno o estudio a realizar</Text>
                 <Image source={icons.plus} 
