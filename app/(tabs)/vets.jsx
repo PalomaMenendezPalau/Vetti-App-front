@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { Link, useRouter } from 'expo-router'; 
-import { icons, images } from '../../constants'; // Assuming your icons are stored here
+import {  useRouter } from 'expo-router'; 
+import { icons } from '../../constants'; // Assuming your icons are stored here
 
 const Vets = () => {
   const navigation = useNavigation(); 
@@ -11,8 +11,8 @@ const Vets = () => {
   const options = [
     { title: 'Especialidades Veterinarias', icon: icons.pets},
     { title: 'Estudios', icon: icons.search },
-    { title: 'Vacunatorios', icon: icons.vaccine },
-    { title: 'Guardias', icon: icons.emergencyroom },
+    { title: 'Vacunatorios', icon: icons.vaccine, section: '../pages/view-vaccination' },
+    { title: 'Guardias', icon: icons.emergencyroom , section: '../pages/view-emergencyroom'},
   ];
 
   return (
@@ -29,7 +29,7 @@ const Vets = () => {
       {/* Options */}
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {options.map((option, index) => (
-          <TouchableOpacity onPress={() => router.push('../pages/view-vets')}
+          <TouchableOpacity onPress={() => router.push(option.section)}
             key={index}
             className="flex-row items-center justify-between rounded-lg p-4 mb-4 shadow-md bg-gray-600"
           >

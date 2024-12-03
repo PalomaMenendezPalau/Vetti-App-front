@@ -72,7 +72,7 @@ const Pets = () => {
       <View className="p-4">
         <TouchableOpacity
           className="bg-secondary rounded-xl min-h-[62px] flex flex-row justify-center items-center"
-          onPress={() => router.push('/add-pets')}
+          onPress={() => router.push('pages/add-pets')}
         >
           <Text className="text-white font-bold text-lg">Agregar Mascosta</Text>
         </TouchableOpacity>

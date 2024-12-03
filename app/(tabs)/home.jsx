@@ -6,12 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 // Assuming you have icons for each button
 import { icons, images } from '../../constants'; // Assuming your icons are stored here
 import { fetchUserDetails } from '../../utils/users_api'; 
-
+import {  useRouter } from 'expo-router'; 
 
 const Home = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigation = useNavigation(); 
+    const router = useRouter();
 
       // Fetch user details when the component mounts
   useEffect(() => {
@@ -79,7 +80,7 @@ const Home = () => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] bg-gray-600 rounded-xl p-5 mb-4 items-center shadow-md"
-              onPress={() => navigation.jumpTo('request-appointment')}>
+              onPress={() => router.push('../pages/view-emergencyroom')}>
                 <Text className="text-lg font-psemibold text-white">Buscar guardia</Text>
                 <Text className="text-sm font-pmedium text-center text-white">Consultá las diferentes guardias</Text>
                 <Image source={icons.search} 

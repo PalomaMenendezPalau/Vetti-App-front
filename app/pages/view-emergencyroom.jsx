@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Picker } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { fetchVets } from '../../utils/vets_api'; // Assuming the API function is in user_api.js
+import { Picker } from '@react-native-picker/picker';
 
-const VetListView = () => {
+
+
+const ViewEmergencyroom = () => {
   const [vets, setVets] = useState([]);
   const [filteredVets, setFilteredVets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,16 +66,17 @@ const VetListView = () => {
   }
 
   return (
-    <View className="flex-1 bg-gray-200">
+    <View className="flex-1 bg-gray-800">
       <Text className="text-2xl font-semibold text-center text-white py-4 bg-gray-800">
         Guardias 24/hrs
       </Text>
-      <View className="bg-white px-4 py-3">
-        <Text className="text-lg font-medium mb-2">Filter by District:</Text>
+      <View className="bg-gray-800 px-4 ">
+        <Text className="text-lg text-white font-pmedium mb-2">Buscar por Barrio:</Text>
         <Picker
           selectedValue={selectedDistrict}
           onValueChange={(value) => handleDistrictChange(value)}
-          style={{ height: 50, borderColor: 'gray', borderWidth: 1 }}
+          style={{ height: 40,width: 300, borderColor: 'white', borderWidth: 1.5, borderRadius:1  , backgroundColor:"gray", textShadowColor:"white"}}
+          
         >
           <Picker.Item label="All Districts" value="" />
           {districts.map((district) => (
@@ -90,4 +94,4 @@ const VetListView = () => {
   );
 };
 
-export default VetListView;
+export default ViewEmergencyroom;
