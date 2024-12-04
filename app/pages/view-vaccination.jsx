@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { fetchAndSaveCombinedVetData } from "../../utils/vets_api";
+import { Picker } from "@react-native-picker/picker";
+import { Link } from "expo-router";
 
 const ViewVaccination = () => {
     const [vetData, setVetData] = useState([]);
-    const [neighborhood, setNeighborhood] = useState("");
+    const [districts, setDistricts] = useState([]);
+    const [selectedDistrict, setSelectedDistrict] = useState("");
 
     useEffect(() => {
         const loadVetData = async () => {
             try {
                 const combinedData = await fetchAndSaveCombinedVetData();
                 setVetData(combinedData);
+
+                // Extract unique districts from the data
+                const uniqueDistricts = [...new Set(combinedData.map((vet) => vet.district))];
+                setDistricts(uniqueDistricts);
             } catch (error) {
                 console.error("Error loading vet data:", error);
             }
@@ -19,58 +26,87 @@ const ViewVaccination = () => {
         loadVetData();
     }, []);
 
-    // Filter data by neighborhood
-    const filteredData = neighborhood
-        ? vetData.filter((vet) =>
-              vet.neighborhood.toLowerCase().includes(neighborhood.toLowerCase())
-          )
+    // Filter data by selected district
+    const filteredData = selectedDistrict
+        ? vetData.filter((vet) => vet.district === selectedDistrict)
         : vetData;
 
-    return (
-        <ScrollView className="flex-1 bg-white p-4">
-            <Text className="text-xl font-bold text-center mb-4">Vaccination Centers</Text>
+    // Transform data to include only events with "Extracción de sangre"
+    const transformedData = filteredData.flatMap((vet) =>
+        vet.events
+            .filter((event) => event.eventName === "Extracción de sangre" || "Generales") // Filter for specific event name
+            .map((event) => ({ ...event, vetName: vet.vetName, vet }))
+    );
 
-            {/* Neighborhood Filter */}
-            <View className="mb-6">
-                <TextInput
-                    className="border border-gray-300 rounded-lg p-2 text-base"
-                    placeholder="Enter neighborhood"
-                    value={neighborhood}
-                    onChangeText={setNeighborhood}
-                />
+    return (
+        <ScrollView className="flex-1 bg-gray-800 p-4">
+            <Text className="text-2xl font-psemibold text-white text-center mb-4">
+                Extracción de Sangre
+            </Text>
+
+            {/* District Filter */}
+            <View className="bg-gray-700 rounded-lg overflow-hidden justify-center border border-gray-500 mb-6 h-24">
+                <Picker
+                    selectedValue={selectedDistrict}
+                    onValueChange={(value) => setSelectedDistrict(value)}
+                    className="text-white"
+                    dropdownIconColor="white"
+                     style={{
+                        color: 'white',
+                        backgroundColor: 'transparent',
+                        textAlign: 'center', // Center text for Android
+                        textAlignVertical: 'center', // Center text vertically for Android
+                        
+                        }}
+                      itemStyle={{
+                          textAlign: 'center', // Center text for iOS
+                          color: 'white', // Ensure white text
+                          fontSize: 16, // Adjust font size for readability
+                        
+                                  }}
+                   >
+                    <Picker.Item label="All Districts" value="" />
+                    {districts.map((district, index) => (
+                        <Picker.Item key={index} label={district} value={district} />
+                    ))}
+                </Picker>
             </View>
 
-            {/* Display Filtered Data */}
-            {filteredData.length > 0 ? (
-                filteredData.map((vet) => (
+            {/* Display Transformed Data */}
+            {transformedData.length > 0 ? (
+                transformedData.map((data, index) => (
                     <View
-                        key={vet.id}
-                        className="bg-gray-100 rounded-lg p-4 mb-4 shadow-md"
+                        key={index}
+                        className="bg-gray-600 rounded-lg p-4 mb-4 shadow-md"
                     >
-                        <Text className="text-lg font-semibold">{vet.vetName}</Text>
-                        <Text className="text-gray-600">Address: {vet.address}</Text>
-                        <Text className="text-gray-600">Neighborhood: {vet.neighborhood}</Text>
-                        <Text className="text-gray-600">Phone: {vet.phone}</Text>
-
-                        <Text className="text-lg font-semibold mt-4">Available Events:</Text>
-                        {vet.events && vet.events.length > 0 ? (
-                            vet.events.map((event, index) => (
-                                <View
-                                    key={index}
-                                    className="bg-white p-2 rounded-md mt-2 border border-gray-200"
-                                >
-                                    <Text className="text-gray-800">Event: {event.title}</Text>
-                                    <Text className="text-gray-800">Date: {event.date}</Text>
-                                    <Text className="text-gray-800">Time: {event.time}</Text>
-                                </View>
-                            ))
-                        ) : (
-                            <Text className="text-gray-600">No events available.</Text>
-                        )}
+                        <Text className="text-lg font-psemibold text-white mb-2">
+                            Event: {data.eventName}
+                        </Text>
+                        <Text className="text-sm text-white mb-1">
+                            Veterinaria: {data.vet.name}
+                        </Text>
+                        <Text className="text-sm text-white">
+                            Address: {data.vet.address}
+                        </Text>
+                        <Text className="text-sm text-white">
+                            District: {data.vet.district}
+                        </Text>
+                        <Text className="text-sm text-white">
+                            Phone: {data.vet.phoneNumber}
+                        </Text>
+                        <TouchableOpacity className="mt-4">
+                            <Link href="pages/request-appointment">
+                                <Text className="text-blue-400 text-center font-pbold">
+                                    Solicitar turno
+                                </Text>
+                            </Link>
+                        </TouchableOpacity>
                     </View>
                 ))
             ) : (
-                <Text className="text-gray-600 text-center">No veterinarians found.</Text>
+                <Text className="text-center text-sm text-white">
+                    No se encontraron Veterinarias con eventos de "Extracción de sangre".
+                </Text>
             )}
         </ScrollView>
     );

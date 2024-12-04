@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { fetchVets } from '../../utils/vets_api'; // Assuming the API function is in user_api.js
+import { fetchVets } from '../../utils/vets_api';
 import { Picker } from '@react-native-picker/picker';
-
-
 
 const ViewEmergencyroom = () => {
   const [vets, setVets] = useState([]);
@@ -16,10 +14,7 @@ const ViewEmergencyroom = () => {
     const loadVets = async () => {
       try {
         const vetData = await fetchVets();
-        // Filter only vets with isEmergencyVet as true
         const emergencyVets = vetData.filter((vet) => vet.isEmergencyVet);
-
-        // Extract unique districts
         const uniqueDistricts = [...new Set(emergencyVets.map((vet) => vet.district))];
         setDistricts(uniqueDistricts);
 
@@ -38,51 +33,61 @@ const ViewEmergencyroom = () => {
   const handleDistrictChange = (district) => {
     setSelectedDistrict(district);
     if (district) {
-      // Filter vets by selected district
       setFilteredVets(vets.filter((vet) => vet.district === district));
     } else {
-      // Show all vets if no district is selected
       setFilteredVets(vets);
     }
   };
 
   const renderVetItem = ({ item }) => (
     <View className="bg-gray-600 shadow-md rounded-lg p-4 mb-4">
-      <Text className="text-lg text-white font-semibold mb-2">{item.name}</Text>
-      <Text className="text-sm text-white">District: {item.district}</Text>
-      <Text className="text-sm text-white">Address: {item.address}</Text>
-      <Text className="text-sm text-white">Email: {item.email}</Text>
-      <Text className="text-sm text-white">Phone: {item.phoneNumber}</Text>
+      <Text className="text-lg text-white font-psemibold mb-2">{item.name}</Text>
+      <Text className="text-sm text-white font-pregular mb-1">Barrio: {item.district}</Text>
+      <Text className="text-sm text-white font-pregular mb-1">Dirección: {item.address}</Text>
+      <Text className="text-sm text-white font-pregular mb-1">Correo electrónico: {item.email}</Text>
+      <Text className="text-sm text-white font-pregular mb-1">Teléfono: {item.phoneNumber}</Text>
     </View>
   );
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-gray-100">
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text className="text-blue-500 mt-4">Loading vets...</Text>
+      <View className="flex-1 justify-center items-center bg-gray-800">
+        <ActivityIndicator size="large" color="#ffffff" />
+        <Text className="text-white mt-4">Loading vets...</Text>
       </View>
     );
   }
 
   return (
     <View className="flex-1 bg-gray-800">
-      <Text className="text-2xl font-semibold text-center text-white py-4 bg-gray-800">
+      <Text className="text-2xl font-psemibold text-center text-white py-4 bg-gray-800">
         Guardias 24/hrs
       </Text>
-      <View className="bg-gray-800 px-4 ">
+      <View className="bg-gray-800 px-4 mb-4 items-center">
         <Text className="text-lg text-white font-pmedium mb-2">Buscar por Barrio:</Text>
-        <Picker
-          selectedValue={selectedDistrict}
-          onValueChange={(value) => handleDistrictChange(value)}
-          style={{ height: 40,width: 300, borderColor: 'white', borderWidth: 1.5, borderRadius:1  , backgroundColor:"gray", textShadowColor:"white"}}
-          
-        >
-          <Picker.Item label="All Districts" value="" />
-          {districts.map((district) => (
-            <Picker.Item key={district} label={district} value={district} />
-          ))}
-        </Picker>
+        <View className="bg-gray-700 rounded-lg justify-center border border-gray-500 w-80 h-24">
+          <Picker
+            selectedValue={selectedDistrict}
+            onValueChange={(value) => handleDistrictChange(value)}
+            dropdownIconColor="white"
+            style={{
+              color: 'white',
+              backgroundColor: 'transparent',
+              textAlign: 'center', // Center text for Android
+              textAlignVertical: 'center', // Center text vertically for Android
+            }}
+            itemStyle={{
+              textAlign: 'center', // Center text for iOS
+              color: 'white', // Ensure white text
+              fontSize: 16, // Adjust font size for readability
+            }}
+          >
+            <Picker.Item label="All Districts" value="" />
+            {districts.map((district) => (
+              <Picker.Item key={district} label={district} value={district} />
+            ))}
+          </Picker>
+        </View>
       </View>
       <FlatList
         data={filteredVets}

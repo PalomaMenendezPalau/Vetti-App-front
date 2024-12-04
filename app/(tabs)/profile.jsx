@@ -17,11 +17,11 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await clearUserData(); // Clear session data
-      Alert.alert('Logged Out', 'You have been successfully logged out.');
+      Alert.alert('Saliste de la cuenta', 'Has cerrado sesión con éxito.');
       navigation.replace('index'); // Navigate to the login screen
     } catch (error) {
-      console.error('Error during logout:', error);
-      Alert.alert('Error', 'An error occurred while logging out.');
+      console.error('Error al salir de tu cuenta:', error);
+      Alert.alert('Error', 'A ocurrido un error al salir de tu cuenta.');
     }
   };
 
@@ -31,7 +31,7 @@ const Profile = () => {
         const userDetails = await fetchUserDetails();
         setUser(userDetails);
       } catch (error) {
-        console.error('Failed to fetch user details:', error);
+        console.error('Error al obtener la información del usuario:', error);
       } finally {
         setLoading(false);
       }
@@ -51,9 +51,9 @@ const Profile = () => {
 
   return (
     <SafeAreaView className="bg-gray-800 flex-1">
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 10 }}>
         {/* Header */}
-        <View className="flex-row justify-between items-center mt-4 mb-6">
+        <View className="flex-row justify-between items-center  mb-2">
           <Text className="text-2xl font-psemibold text-white">Mi Perfil</Text>
           <Link href="../pages/edit-profile" className='px-4 py-2 rounded-full bg-gray-200'
             >
@@ -74,12 +74,12 @@ const Profile = () => {
             {user ? `${user.name} ${user.lastName}` : 'User'}
           </Text>
           <View className="size-1 mt-2 font-pbold border rounded-full border-amber-950 bg-red-900">
-                <Button title="Cerrar Sesion" onPress={handleLogout} color="#FF4D4D" />
+                <Button title="Cerrar sesión" onPress={handleLogout} color="#FF4D4D" />
             </View>
         </View>
 
         {/* Tabs */}
-        <View className="flex-row justify-center mb-6 space-x-2">
+        <View className="flex-row justify-center mb-2 space-x-2">
           <TouchableOpacity
             onPress={() => setActiveTab('personalInfo')}
             className={`px-4 py-2 rounded-full ${
@@ -109,10 +109,10 @@ const Profile = () => {
               {user && [
                 { label: 'Nombre', value: user.name, icon: '👤' },
                 { label: 'Apellido', value: user.lastName, icon: '👥' },
-                { label: 'Mail', value: user.email, icon: '✉️' },
+                { label: 'Correo electrónico', value: user.email, icon: '✉️' },
                 { label: 'Número de teléfono', value: user.phoneNumber, icon: '📞' },
                 { label: 'Barrio', value: user.district || 'N/a', icon: '📍' },
-                {label: 'Direccion', value: user.address || 'N/a', icon: '📍' }
+                {label: 'Dirección', value: user.address || 'N/a', icon: '📍' }
               ].map((item, index) => (
                 <View key={index} className="flex-row items-center">
                   <Text className="text-gray-400 mr-4">{item.icon}</Text>

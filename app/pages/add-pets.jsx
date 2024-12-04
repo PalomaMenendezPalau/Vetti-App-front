@@ -81,6 +81,7 @@ const AddPet = () => {
                         display="spinner"
                         onChange={onChange}
                         maximumDate={maxDate}
+                        
                     />
                 )}
             </View>

@@ -34,7 +34,7 @@ const Pets = () => {
   ];
 
   return (
-    <SafeAreaView className="bg-gray-800 h-full">
+    <SafeAreaView className="bg-gray-800 h-full -mt-2">
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 1 }}>
         {/* Header */}
         <View className="w-full px-4 flex-row justify-between items-center -mt-">
