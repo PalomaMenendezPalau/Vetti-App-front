@@ -90,7 +90,7 @@ const SignUp = () => {
           /> 
 
           <FormField
-            title="Email"
+            title="Correo electrónico"
             value={form.email}
             placeholder="tu.email@email.com"
             handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -99,8 +99,8 @@ const SignUp = () => {
           />
 
           <FormField
-            title="Numero de Telefono"
-            placeholder="54 1123457890"
+            title="Número de teléfono"
+            placeholder="1123457890"
             value={form.phoneNumber}
             handleChangeText={(e) => setForm({ ...form, phoneNumber: e })}
             otherStyles="mt-2"
@@ -115,7 +115,7 @@ const SignUp = () => {
           />
 
           <CustomButton
-            title="Crear Cuenta"
+            title="Crear cuenta"
             handlePress={submit}
             containerStyles="mt-7"
             isLoading={isLoading}

@@ -51,7 +51,7 @@ const SignIn = () => {
             Accede a tu cuenta
           </Text>
           <FormField
-            title="Email"
+            title="Correo electrónico"
             value={form.email}
             placeholder="tu.email@email.com"
             handleChangeText={(e) => setForm({ ...form, email: e })}
@@ -77,7 +77,7 @@ const SignIn = () => {
 
           <View className="justify-center pt-5 flex-row gap-2">
             <Link href="/recover-pass" className="text-base text-sky-800 font-psemibold">
-              ¿Olvidaste tu Contraseña?
+             ¿Olvidaste tu contraseña?
             </Link>
           </View>
           <View className="justify-center pt-5 flex-row gap-2 mt-44">

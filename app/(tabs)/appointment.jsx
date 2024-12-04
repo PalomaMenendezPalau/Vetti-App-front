@@ -75,10 +75,10 @@ const Appointment = () => {
       </ScrollView>
 
       {/* Bottom Button */}
-      <View className="p-4">
+      <View className="p-4 mb-20">
         <TouchableOpacity
           className="bg-secondary rounded-xl min-h-[62px] flex flex-row justify-center items-center"
-          onPress={() => navigation.jumpTo('request-appointment')}
+          onPress={() => navigation.jumpTo('vets')}
         >
           <Text className="text-white font-bold text-lg">Solicitar turno</Text>
         </TouchableOpacity>
