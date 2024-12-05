@@ -65,7 +65,7 @@ const ViewVaccination = () => {
                         
                                   }}
                    >
-                    <Picker.Item label="All Districts" value="" />
+                    <Picker.Item label="Todos los Barrios" value="" />
                     {districts.map((district, index) => (
                         <Picker.Item key={index} label={district} value={district} />
                     ))}
@@ -79,20 +79,20 @@ const ViewVaccination = () => {
                         key={index}
                         className="bg-gray-600 rounded-lg p-4 mb-4 shadow-md"
                     >
-                        <Text className="text-lg font-psemibold text-white mb-2">
-                            Event: {data.eventName}
+                        <Text className="text-xl font-psemibold text-center text-white mb-2">
+                           {data.eventName}
                         </Text>
-                        <Text className="text-sm text-white mb-1">
+                        <Text className="text-sm font-pregular text-white ">
                             Veterinaria: {data.vet.name}
                         </Text>
-                        <Text className="text-sm text-white">
-                            Address: {data.vet.address}
+                        <Text className="text-sm font-pregular text-white ">
+                            Dirección: {data.vet.address}
                         </Text>
-                        <Text className="text-sm text-white">
-                            District: {data.vet.district}
+                        <Text className="text-sm font-pregular text-white ">
+                            Barrio: {data.vet.district}
                         </Text>
-                        <Text className="text-sm text-white">
-                            Phone: {data.vet.phoneNumber}
+                        <Text className="text-sm font-pregular text-white ">
+                        Número de teléfono: {data.vet.phoneNumber}
                         </Text>
                         <TouchableOpacity className="mt-4">
                             <Link href="pages/request-appointment">
@@ -105,7 +105,7 @@ const ViewVaccination = () => {
                 ))
             ) : (
                 <Text className="text-center text-sm text-white">
-                    No se encontraron Veterinarias con eventos de "Extracción de sangre".
+                    No se encontraron Veterinarias con eventos de Vacunación y/o desparasitación.
                 </Text>
             )}
         </ScrollView>

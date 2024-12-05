@@ -15,6 +15,7 @@ import calendar from "../assets/icons/calendar.png";
 import pets from "../assets/icons/pets.png";
 import vaccine from "../assets/icons/vaccine.png"
 import emergencyroom from "../assets/icons/emergency-room.png"
+import trash from "../assets/icons/trash.png"
 
 export default {
   play,
@@ -33,5 +34,6 @@ export default {
   calendar,
   pets,
   vaccine,
-  emergencyroom
+  emergencyroom,
+  trash
 };

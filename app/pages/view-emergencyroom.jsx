@@ -82,7 +82,7 @@ const ViewEmergencyroom = () => {
               fontSize: 16, // Adjust font size for readability
             }}
           >
-            <Picker.Item label="All Districts" value="" />
+            <Picker.Item label="Todos los Barrios" value="" />
             {districts.map((district) => (
               <Picker.Item key={district} label={district} value={district} />
             ))}

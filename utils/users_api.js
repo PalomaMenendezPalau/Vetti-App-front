@@ -118,10 +118,16 @@ export const addPet = async (name, type) => {
     const response = await api.post(`/pets/addPet/${userId}`, {
       name,
       type,
+      birthday
     });
 
     // Log the response for debugging purposes
     console.log('Pet added successfully:', response.data);
+    console.log("Request payload:", {
+      name: petName,
+      type: petType,
+      birthday: formattedDate,
+  });
 
     // Return the response data
     return response.data;
@@ -153,6 +159,27 @@ export const getActiveAppointments = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching active appointments:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error
+  }
+};
+
+// Function to delete a pet by ID
+export const deletePet = async (petId) => {
+  try {
+    if (!petId) {
+      throw new Error('Pet ID is required.');
+    }
+
+    // Sending DELETE request to remove a pet by its ID
+    const response = await api.delete(`/pets/delete/${petId}`);
+
+    // Log the response for debugging purposes
+    console.log('Pet deleted successfully:', response.data);
+
+    // Return the response data
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting pet:', error.response ? error.response.data : error.message);
     throw error; // Handle or propagate the error
   }
 };

@@ -1,4 +1,4 @@
-import {  Image,Text, View, ScrollView } from "react-native";
+import {  Image,Text, View, ScrollView, ActivityIndicator } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,7 +31,7 @@ export default function Index() {
 
                  <Image
                    source={images.path}
-                    className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+                    className="w-[136px] h-[15px] absolute -bottom-2 left-24"
                     resizeMode="contain"
                   />
               </View>
