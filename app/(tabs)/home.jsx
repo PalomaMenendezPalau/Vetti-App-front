@@ -47,7 +47,7 @@ const Home = () => {
           <Text className='text-3xl'>{item.id}</Text>
         )}
         ListHeaderComponent={() => (
-          <View className="my-6 px-4 space-y-6">
+          <View className="my-6 px-4 space-y-6 -mt-2">
             <View className="flex-row justify-between items-start mb-2">
               <View>
                 <Text className="font-pmedium text-xl text-gray-100 text-white">

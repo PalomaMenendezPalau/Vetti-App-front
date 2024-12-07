@@ -56,3 +56,44 @@ export const clearVetData = async () => {
     console.error('Error clearing vet data:', error);
   }
 };
+
+export const saveEventDetails = async (eventName, schedulingUrl) => {
+  try {
+    const eventDetails = {
+      eventName,
+      schedulingUrl
+    };
+
+    // Save the event details object in AsyncStorage
+    await AsyncStorage.setItem('selected_event_details', JSON.stringify(eventDetails));
+    console.log('Selected event details saved successfully.');
+  } catch (error) {
+    console.error('Error saving selected event details:', error);
+  }
+};
+
+// Function to retrieve the selected eventName and schedulingUrl
+export const getEventDetails = async () => {
+  try {
+    const eventDetails = await AsyncStorage.getItem('selected_event_details');
+    
+    // If eventDetails is found, parse it into an object
+    if (eventDetails) {
+      return JSON.parse(eventDetails); // Return the parsed object with both eventName and schedulingUrl
+    }
+    return null; // If no data found, return null
+  } catch (error) {
+    console.error('Error retrieving selected event details:', error);
+    return null;
+  }
+};
+
+// Function to clear the selected event details
+export const clearEventDetails = async () => {
+  try {
+    await AsyncStorage.removeItem('selected_event_details');
+    console.log('Selected event details cleared.');
+  } catch (error) {
+    console.error('Error clearing selected event details:', error);
+  }
+};

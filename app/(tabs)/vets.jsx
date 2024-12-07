@@ -9,8 +9,8 @@ const Vets = () => {
   const navigation = useNavigation(); 
   const router = useRouter();
   const options = [
-    { title: 'Especialidades Veterinarias', icon: icons.pets},
-    { title: 'Estudios', icon: icons.search },
+    { title: 'Especialidades Veterinarias', icon: icons.pets ,section: '../pages/view-services'},
+    { title: 'Estudios', icon: icons.search,section: '../pages/view-labtests' },
     { title: 'Vacunatorios', icon: icons.vaccine, section: '../pages/view-vaccination' },
     { title: 'Guardias', icon: icons.emergencyroom , section: '../pages/view-emergencyroom'},
   ];
@@ -18,7 +18,7 @@ const Vets = () => {
   return (
     <SafeAreaView className="bg-gray-800 h-full">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 ">
+      <View className="flex-row items-center justify-between px-4 -mt-10">
         <TouchableOpacity onPress={() => navigation.jumpTo('home')}>
           <Text className="text-base font-pmedium text-white">{'<'}</Text>
         </TouchableOpacity>
