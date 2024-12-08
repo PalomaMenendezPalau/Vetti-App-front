@@ -91,6 +91,14 @@ const AddPet = () => {
                 >
                     <Text className="text-white font-psemibold">Gato</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => setPetType("Otro")}
+                    className={`px-6 py-3 rounded-full ${
+                        petType === "Otro" ? "bg-blue-500" : "bg-gray-700"
+                    }`}
+                >
+                    <Text className="text-white font-psemibold">Otro</Text>
+                </TouchableOpacity>
             </View>
 
             {/* Pet Birthday */}
@@ -122,7 +130,7 @@ const AddPet = () => {
                 disabled={isLoading}
             >
                 <Text className="text-white text-center text-lg">
-                    {isLoading ? "Adding Pet..." : "Agregar Mascota"}
+                    {isLoading ? "Cargando" : "Agregar Mascota"}
                 </Text>
             </TouchableOpacity>
         </View>

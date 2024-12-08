@@ -1,45 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native";
 import { fetchAndSaveCombinedVetData } from "../../utils/vets_api";
-import { Picker } from "@react-native-picker/picker";
+import { saveEventDetails, getEventDetails } from "../../utils/storage"; // Import the saveEventDetails function
 import { Link } from "expo-router";
+import { Picker } from "@react-native-picker/picker";
 
-const ViewVaccination = () => {
+const ViewLabtests = () => {
     const [vetData, setVetData] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false); // State to manage pull-to-refresh
 
-    useEffect(() => {
-        const loadVetData = async () => {
-            try {
-                const combinedData = await fetchAndSaveCombinedVetData();
-                setVetData(combinedData);
+    // Function to fetch and load vet data
+    const loadVetData = async () => {
+        try {
+            setLoading(true);
+            const combinedData = await fetchAndSaveCombinedVetData();
+            setVetData(combinedData);
 
-                // Extract unique districts from the data
-                const uniqueDistricts = [...new Set(combinedData.map((vet) => vet.district))];
-                setDistricts(uniqueDistricts);
-            } catch (error) {
-                console.error("Error loading vet data:", error);
-            }
-        };
+            // Extract districts that have at least one event with "Extracción de sangre" or "Generales"
+            const districtsWithEvents = [
+                ...new Set(
+                    combinedData
+                        .filter((vet) =>
+                            vet.events.some(
+                                (event) =>
+                                    event.eventName === "Extracción de sangre" ||
+                                    event.eventName === "Generales"
+                            )
+                        )
+                        .map((vet) => vet.district)
+                ),
+            ];
 
-        loadVetData();
-    }, []);
+            setDistricts(districtsWithEvents);
+        } catch (error) {
+            console.error("Error loading vet data:", error);
+        } finally {
+            setLoading(false);
+            setIsRefreshing(false); // Stop refreshing after data is loaded
+        }
+    };
+
+    // Handle pull-to-refresh
+    const onRefresh = () => {
+        setIsRefreshing(true);
+        loadVetData(); // Refetch the data
+    };
 
     // Filter data by selected district
     const filteredData = selectedDistrict
         ? vetData.filter((vet) => vet.district === selectedDistrict)
         : vetData;
 
-    // Transform data to include only events with "Extracción de sangre"
+    // Transform data to include only events with "Extracción de sangre" or "Generales"
     const transformedData = filteredData.flatMap((vet) =>
         vet.events
-            .filter((event) => event.eventName === "Extracción de sangre" || "Generales") // Filter for specific event name
+            .filter((event) => event.eventName === "Extracción de sangre" || event.eventName === "Generales")
             .map((event) => ({ ...event, vetName: vet.vetName, vet }))
     );
 
+    // Handle event click and save details
+    const handleRequestAppointment = (eventName, schedulingUrl) => {
+        console.log("Saving event details:", { eventName, schedulingUrl });
+
+        saveEventDetails(eventName, schedulingUrl);
+
+        // Retrieve saved event details to confirm they are saved correctly
+        getEventDetails().then((data) => {
+            console.log("Retrieved saved event details:", data);
+        }).catch((error) => {
+            console.error("Error retrieving saved event details:", error);
+        });
+
+        console.log(`Event details saved: Event - ${eventName}, URL - ${schedulingUrl}`);
+    };
+
+    useEffect(() => {
+        loadVetData();
+    }, []);
+
+    if (loading) {
+        return (
+            <View className="flex-1 justify-center items-center bg-gray-800">
+                <ActivityIndicator size="large" color="#ffffff" />
+                <Text className="text-white mt-4">Cargando Veterinarias...</Text>
+            </View>
+        );
+    }
+
     return (
-        <ScrollView className="flex-1 bg-gray-800 p-4">
+        <ScrollView
+            className="flex-1 bg-gray-800 p-4"
+            refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+        >
             <Text className="text-2xl font-psemibold text-white text-center mb-4">
                 Extracción de Sangre
             </Text>
@@ -51,20 +106,18 @@ const ViewVaccination = () => {
                     onValueChange={(value) => setSelectedDistrict(value)}
                     className="text-white"
                     dropdownIconColor="white"
-                     style={{
+                    style={{
                         color: 'white',
                         backgroundColor: 'transparent',
                         textAlign: 'center', // Center text for Android
                         textAlignVertical: 'center', // Center text vertically for Android
-                        
-                        }}
-                      itemStyle={{
-                          textAlign: 'center', // Center text for iOS
-                          color: 'white', // Ensure white text
-                          fontSize: 16, // Adjust font size for readability
-                        
-                                  }}
-                   >
+                    }}
+                    itemStyle={{
+                        textAlign: 'center', // Center text for iOS
+                        color: 'white', // Ensure white text
+                        fontSize: 16, // Adjust font size for readability
+                    }}
+                >
                     <Picker.Item label="Todos los Barrios" value="" />
                     {districts.map((district, index) => (
                         <Picker.Item key={index} label={district} value={district} />
@@ -75,26 +128,26 @@ const ViewVaccination = () => {
             {/* Display Transformed Data */}
             {transformedData.length > 0 ? (
                 transformedData.map((data, index) => (
-                    <View
-                        key={index}
-                        className="bg-gray-600 rounded-lg p-4 mb-4 shadow-md"
-                    >
+                    <View key={index} className="bg-gray-600 rounded-lg p-4 mb-4 shadow-md">
                         <Text className="text-xl font-psemibold text-center text-white mb-2">
-                           {data.eventName}
+                            {data.eventName}
                         </Text>
-                        <Text className="text-sm font-pregular text-white ">
+                        <Text className="text-sm font-pregular text-white">
                             Veterinaria: {data.vet.name}
                         </Text>
-                        <Text className="text-sm font-pregular text-white ">
+                        <Text className="text-sm font-pregular text-white">
                             Dirección: {data.vet.address}
                         </Text>
-                        <Text className="text-sm font-pregular text-white ">
+                        <Text className="text-sm font-pregular text-white">
                             Barrio: {data.vet.district}
                         </Text>
-                        <Text className="text-sm font-pregular text-white ">
-                        Número de teléfono: {data.vet.phoneNumber}
+                        <Text className="text-sm font-pregular text-white">
+                            Número de teléfono: {data.vet.phoneNumber}
                         </Text>
-                        <TouchableOpacity className="mt-4">
+                        <TouchableOpacity 
+                            className="mt-4"
+                            onPress={() => handleRequestAppointment(data.eventName, data.schedulingUrl)} // Pass event details
+                        >
                             <Link href="pages/request-appointment">
                                 <Text className="text-blue-400 text-center font-pbold">
                                     Solicitar turno
@@ -112,4 +165,4 @@ const ViewVaccination = () => {
     );
 };
 
-export default ViewVaccination;
+export default ViewLabtests;

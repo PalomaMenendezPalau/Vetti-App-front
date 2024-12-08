@@ -97,3 +97,33 @@ export const clearEventDetails = async () => {
     console.error('Error clearing selected event details:', error);
   }
 };
+
+export const saveEmailForPasswordReset = async (email) => {
+  try {
+    await AsyncStorage.setItem('reset_password_email', email);
+    console.log('Email for password reset saved successfully.');
+  } catch (error) {
+    console.error('Error saving email for password reset:', error);
+  }
+};
+
+// Function to retrieve the saved email for password reset
+export const getEmailForPasswordReset = async () => {
+  try {
+    const email = await AsyncStorage.getItem('reset_password_email');
+    return email; // Return the saved email
+  } catch (error) {
+    console.error('Error retrieving email for password reset:', error);
+    return null;
+  }
+};
+
+// Function to clear the saved email for password reset
+export const clearEmailForPasswordReset = async () => {
+  try {
+    await AsyncStorage.removeItem('reset_password_email');
+    console.log('Email for password reset cleared.');
+  } catch (error) {
+    console.error('Error clearing email for password reset:', error);
+  }
+};

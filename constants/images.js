@@ -7,5 +7,6 @@ import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
 import dog from "../assets/images/dog.png";
 import cat from "../assets/images/cat.png";
+import animal from "../assets/images/animal.png"
 
-export default { profile, thumbnail, cards, path, logo, logoSmall, empty , dog , cat };
+export default { profile, thumbnail, cards, path, logo, logoSmall, empty , dog , cat , animal  };

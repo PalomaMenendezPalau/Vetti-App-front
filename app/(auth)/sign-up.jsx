@@ -93,7 +93,7 @@ const SignUp = () => {
             title="Correo electrónico"
             value={form.email}
             placeholder="tu.email@email.com"
-            handleChangeText={(e) => setForm({ ...form, email: e })}
+            handleChangeText={(e) => setForm({ ...form, email: e.toLowerCase() })}
             otherStyles="mt-2"
             keybordType="email-address"
           />

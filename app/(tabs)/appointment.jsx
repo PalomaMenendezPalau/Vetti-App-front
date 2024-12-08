@@ -1,30 +1,55 @@
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { getActiveAppointments } from '../../utils/users_api'; // Import the API function
+import { getActiveAppointments, cancelEvent } from '../../utils/users_api'; // Import the cancelEvent API function
 
 const Appointment = () => {
   const navigation = useNavigation();
   const [appointments, setAppointments] = useState([]); // State to store appointments
   const [loading, setLoading] = useState(true); // State to manage loading
   const [error, setError] = useState(null); // State to handle errors
+  const [isRefreshing, setIsRefreshing] = useState(false); // State to handle pull-to-refresh
 
-  // Fetch appointments when the component mounts
+  // Fetch appointments function
+  const fetchAppointments = async () => {
+    try {
+      setLoading(true); // Set loading to true while fetching data
+      const data = await getActiveAppointments();
+      setAppointments(data); // Set fetched appointments
+    } catch (err) {
+      console.error('Error fetching appointments:', err);
+      setError('Failed to load appointments. Please try again later.');
+    } finally {
+      setLoading(false); // Stop loading spinner
+    }
+  };
+
+  // Fetch appointments on load and on refresh
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const data = await getActiveAppointments();
-        setAppointments(data); // Set fetched appointments
-      } catch (err) {
-        console.error('Error fetching appointments:', err);
-        setError('Failed to load appointments. Please try again later.');
-      } finally {
-        setLoading(false); // Stop loading spinner
-      }
-    };
-
-    fetchAppointments();
+    fetchAppointments(); // Fetch appointments when the component mounts
   }, []);
+
+  // Function to handle pull-to-refresh
+  const onRefresh = async () => {
+    setIsRefreshing(true); // Set refreshing to true
+    await fetchAppointments(); // Refetch appointments on pull-to-refresh
+    setIsRefreshing(false); // Stop refreshing once the data is fetched
+  };
+
+  // Function to cancel the appointment
+  const handleCancelAppointment = async (eventId) => {
+    try {
+      const reason = " "; // Empty reason as specified in the request
+      const response = await cancelEvent(eventId, reason);
+      console.log('Appointment canceled:', response);
+      Alert.alert("Success", "Your appointment has been canceled.");
+      // Optionally, refresh the appointments after cancellation
+      setAppointments(appointments.filter((appt) => appt.eventId !== eventId));
+    } catch (error) {
+      console.error('Error canceling appointment:', error);
+      Alert.alert("Error", "Failed to cancel your appointment. Please try again later.");
+    }
+  };
 
   // Handle error state
   if (error) {
@@ -51,7 +76,10 @@ const Appointment = () => {
   return (
     <View className="flex-1 bg-gray-800">
       <Text className="text-2xl font-semibold text-center text-white mt-5 mb-5">Turnos Agendados</Text>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 8 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 8 }}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} // Add the refresh control
+      >
         {appointments.length > 0 ? (
           appointments.map((appointment, index) => (
             <View
@@ -64,13 +92,13 @@ const Appointment = () => {
               </Text>
               <Text className="text-sm text-white font-pmedium">{appointment.vetName}</Text>
               <Text className="text-xs text-white font-pthin">{appointment.location || 'No location specified'}</Text>
-              <TouchableOpacity className="mt-4">
+              <TouchableOpacity className="mt-4" onPress={() => handleCancelAppointment(appointment.eventId)}>
                 <Text className="text-red-500 font-pbold">Cancelar turno</Text>
               </TouchableOpacity>
             </View>
           ))
         ) : (
-          <Text className="text-center text-white">No active appointments found.</Text>
+          <Text className="text-center text-white">No hay turnos agendados.</Text>
         )}
       </ScrollView>
 

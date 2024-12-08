@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 import { useRouter } from 'expo-router';
 import { fetchUserDetails, deletePet } from '../../utils/users_api'; // Ensure the path is correct
-import { images , icons } from '../../constants'; // Assume you have dog and cat images in this module
+import { images, icons } from '../../constants'; // Assume you have dog, cat, and animal images in this module
 
 const Pets = () => {
   const router = useRouter();
@@ -85,8 +85,15 @@ const Pets = () => {
               className="flex-row items-center bg-gray-100 rounded-lg p-3 shadow-sm justify-between"
             >
               <View className="flex-row items-center">
+                {/* Conditional Image based on Pet Type */}
                 <Image
-                  source={pet.type.toLowerCase() === 'perro' ? images.dog : images.cat} // Conditional image
+                  source={
+                    pet.type.toLowerCase() === 'perro'
+                      ? images.dog
+                      : pet.type.toLowerCase() === 'gato'
+                      ? images.cat
+                      : images.animal // Default image for 'Otro' or other types
+                  }
                   className="w-14 h-14 rounded-full bg-gray-300"
                   resizeMode="cover"
                 />

@@ -105,7 +105,7 @@ export const updateUser = async (userId, updatedData) => {
 };
 
 // Function to add a pet for a specific user
-export const addPet = async (name, type) => {
+export const addPet = async (name, type , birthday) => {
   try {
     // Retrieve the user ID from storage
     const { userId } = await getUserData();
@@ -123,11 +123,7 @@ export const addPet = async (name, type) => {
 
     // Log the response for debugging purposes
     console.log('Pet added successfully:', response.data);
-    console.log("Request payload:", {
-      name: petName,
-      type: petType,
-      birthday: formattedDate,
-  });
+
 
     // Return the response data
     return response.data;
@@ -181,5 +177,56 @@ export const deletePet = async (petId) => {
   } catch (error) {
     console.error('Error deleting pet:', error.response ? error.response.data : error.message);
     throw error; // Handle or propagate the error
+  }
+};
+
+export const cancelEvent = async (eventId, reason) => {
+  try {
+    // Make POST request to cancel the event
+    const response = await api.post('/calendly/scheduled_events/cancellation', {
+      eventId,
+      reason,
+    });
+
+    // Log the response for debugging
+    console.log('Event canceled successfully:', response.data);
+
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error canceling event:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error
+  }
+};
+
+export const requestPasswordReset = async (email) => {
+  try {
+    // Sending POST request to request a password reset
+    const response = await api.post('/api/password/request/email', {
+      email,
+    });
+
+    // Log the response for debugging purposes
+    console.log('Password reset request sent successfully:', response.data);
+
+    return response.data; // Return the response data (if any)
+  } catch (error) {
+    console.error('Error sending password reset request:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error
+  }
+};
+
+export const resetPassword = async (email, code, newPassword) => {
+  try {
+    const response = await api.post('/api/password/reset', {
+      email,
+      code,
+      newPassword
+    });
+
+    console.log('Password reset successfully:', response.data);
+    return response.data; // Returning the response data if needed
+  } catch (error) {
+    console.error('Error resetting password:', error.response ? error.response.data : error.message);
+    throw error; // Handle or propagate the error for further action
   }
 };
