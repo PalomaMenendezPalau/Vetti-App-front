@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from 'expo-router';
-import { fetchUserDetails, updateUser } from '../../utils/users_api'; // Adjust import paths if needed
-import { getUserData } from '../../utils/storage'; // Adjust import paths if needed
+import { fetchUserDetails, updateUser } from '../../utils/users_api'; 
+import { getUserData } from '../../utils/storage'; 
 
 const EditProfile = () => {
   const [user, setUser] = useState({
@@ -13,16 +13,15 @@ const EditProfile = () => {
   });
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userId, setUserId] = useState(null); // State to store user ID
+  const [userId, setUserId] = useState(null); 
   const navigation = useNavigation();
 
-  // Fetch user details and user ID when the component mounts
+
   useEffect(() => {
     const initializeUserDetails = async () => {
       try {
-        // Get the user ID from AsyncStorage
         const { userId } = await getUserData();
-        setUserId(userId); // Store userId in state
+        setUserId(userId); 
 
         if (!userId) {
           Alert.alert('Error', 'User ID not found.');
@@ -30,7 +29,6 @@ const EditProfile = () => {
           return;
         }
 
-        // Fetch user details from API
         const userDetails = await fetchUserDetails();
         setUser({
           name: userDetails.name || '',
@@ -42,7 +40,7 @@ const EditProfile = () => {
         });
       } catch (error) {
         console.error('Failed to fetch user details:', error);
-        Alert.alert('Error', 'Failed to load user details.');
+        Alert.alert('Error', 'Error al mostrar los datos del usuario.');
       } finally {
         setLoading(false);
       }
@@ -51,7 +49,6 @@ const EditProfile = () => {
     initializeUserDetails();
   }, []);
 
-  // Handle form input changes
   const handleChange = (field, value) => {
     setUser((prev) => ({
       ...prev,
@@ -59,10 +56,9 @@ const EditProfile = () => {
     }));
   };
 
-  // Handle form submission to update user details
   const handleSubmit = async () => {
-    if (!user.name || !user.email || !user.phoneNumber) {
-      Alert.alert('Error', 'Please fill in all required fields.');
+    if (!user.name || !user.email) {
+      Alert.alert('Error', 'Porfavor complete todos los datos requeridos');
       return;
     }
 
@@ -70,25 +66,25 @@ const EditProfile = () => {
       setIsSubmitting(true);
 
       if (!userId) {
-        Alert.alert('Error', 'User ID is missing.');
+        Alert.alert('Error', 'No se encontro el usuario');
         setIsSubmitting(false);
         return;
       }
 
       const updatedData = {
-        district: user.district, // Assuming 'district' maps to 'address'
-        address: user.address, // Assuming 'district' maps to 'address'
+        district: user.district, 
+        address: user.address, 
       };
 
-      console.log(`User ID sent to updateUser endpoint: ${userId}`); // Log the userId in the terminal
+      console.log(`User ID sent to updateUser endpoint: ${userId}`); 
       console.log('Payload sent to updateUser:', updatedData);
 
-      await updateUser(userId, updatedData); // Use the retrieved user ID
-      Alert.alert('Success', 'Your profile has been updated.');
-      navigation.goBack(); // Navigate back to the profile screen
+      await updateUser(userId, updatedData); 
+      Alert.alert('Éxito', 'Su perfil fue actualizado.');
+      navigation.goBack();
     } catch (error) {
       console.error('Failed to update profile:', error);
-      Alert.alert('Error', 'Failed to update your profile. Please try again.');
+      Alert.alert('Error', 'Error al actualizar el perfil del usuario.');
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +94,7 @@ const EditProfile = () => {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading user details...</Text>
+        <Text>Cargando datos del usuario...</Text>
       </View>
     );
   }
@@ -106,7 +102,6 @@ const EditProfile = () => {
   return (
     <SafeAreaView className="bg-gray-800 h-full">
       <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 20 }}>
-        {/* Header */}
         <View className="flex-row justify-between items-center mt-4 mb-6">
           <Text className="text-2xl font-bold text-white">Editar Perfil</Text>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -143,7 +138,7 @@ const EditProfile = () => {
                        />
                  </View>
                  <View>
-                  <Text className="text-lg font-psemibold text-white">📍   Direccion</Text>
+                  <Text className="text-lg font-psemibold text-white">📍   Dirección</Text>
                       <TextInput
                          value={user.address}
                          onChangeText={(text) => handleChange('address', text)}
@@ -154,9 +149,6 @@ const EditProfile = () => {
              </View>
 
              
-
-
-        {/* Submit button */}
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={isSubmitting}

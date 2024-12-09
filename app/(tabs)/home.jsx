@@ -3,8 +3,7 @@ import { View, Text, FlatList, Image, TouchableOpacity , ActivityIndicator} from
 import {React , useState, useEffect }from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-// Assuming you have icons for each button
-import { icons, images } from '../../constants'; // Assuming your icons are stored here
+import { icons, images } from '../../constants';
 import { fetchUserDetails } from '../../utils/users_api'; 
 import {  useRouter } from 'expo-router'; 
 
@@ -14,7 +13,6 @@ const Home = () => {
     const navigation = useNavigation(); 
     const router = useRouter();
 
-      // Fetch user details when the component mounts
   useEffect(() => {
     const getUserDetails = async () => {
       try {
@@ -34,7 +32,7 @@ const Home = () => {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading user details...</Text>
+        <Text>Cargando...</Text>
       </View>
     );
   }
@@ -66,9 +64,7 @@ const Home = () => {
               </View>
             </View>
 
-            {/* Button Boxes */}
             <View className="flex-row flex-wrap justify-between mt-5">
-              {/* First Row */}
               <TouchableOpacity className="w-[48%] bg-gray-600 rounded-xl p-5 mb-4 items-center shadow-md"
                onPress={() => navigation.jumpTo('vets')}>
                 <Text className="text-lg font-psemibold text-white">Solicitar turno</Text>
@@ -88,7 +84,6 @@ const Home = () => {
                 resizeMode="contain" />
               </TouchableOpacity>
 
-              {/* Second Row */}
               <TouchableOpacity className="w-[48%] bg-gray-600 rounded-xl p-5 mb-4 items-center shadow-md"
                onPress={() => navigation.jumpTo('appointment')}>
                 <Text className="text-lg font-psemibold text-white">Ver mis turnos</Text>

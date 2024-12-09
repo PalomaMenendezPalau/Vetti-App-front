@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CustomButton, FormField, images } from '../../constants';
-import { Link, useRouter } from 'expo-router'; // Import useRouter for navigation
-import { signInUser } from '../../utils/users_api';  // Ensure the path to your users_api.js is correct
+import { Link, useRouter } from 'expo-router'; 
+import { signInUser } from '../../utils/users_api';  
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -12,23 +12,19 @@ const SignIn = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter(); // Get the router object from expo-router
+  const router = useRouter();
 
   const submit = async () => {
     setIsLoading(true);
 
     try {
-      // Call the signInUser function to authenticate the user
       const { token, user } = await signInUser(form.email, form.password);
 
-      // Log the data for debugging
       console.log('Login successful:', user);
       
-      // Navigate to the Home page using expo-router's router.push
-      router.push('/home');  // This will redirect the user to the Home screen
+      router.push('/home');  
       
     } catch (error) {
-      // Show an alert in case of an error
       Alert.alert('Error', error.response ? error.response.data.message : 'Login failed. Please try again.');
       console.error('Login error:', error);
       console.log("Request URL:", url);
@@ -65,14 +61,14 @@ const SignIn = () => {
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-4"
-            secureTextEntry={true} // Ensure password is masked
+            secureTextEntry={true} 
           />
 
           <CustomButton
             title="Iniciar sesión"
-            handlePress={submit} // Attach the submit function to the button press
+            handlePress={submit} 
             containerStyles="mt-7"
-            isLoading={isLoading} // Disable button while logging in
+            isLoading={isLoading} 
           />
 
           <View className="justify-center pt-5 flex-row gap-2">

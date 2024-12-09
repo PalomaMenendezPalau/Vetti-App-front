@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native";
 import { fetchAndSaveCombinedVetData } from "../../utils/vets_api";
-import { saveEventDetails, getEventDetails } from "../../utils/storage"; // Import the saveEventDetails function
-import { Link } from "expo-router";
+import { saveEventDetails, getEventDetails } from "../../utils/storage"; 
+import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 
 const ViewVaccination = () => {
@@ -10,24 +10,23 @@ const ViewVaccination = () => {
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [loading, setLoading] = useState(true);
-    const [isRefreshing, setIsRefreshing] = useState(false); // State to manage pull-to-refresh
+    const [isRefreshing, setIsRefreshing] = useState(false); 
+    const router = useRouter();
 
-    // Function to fetch and load vet data
+    // Load vet data and filter based on event name
     const loadVetData = async () => {
         try {
             setLoading(true);
             const combinedData = await fetchAndSaveCombinedVetData();
             setVetData(combinedData);
 
-            // Extract districts that have at least one event with "Extracción de sangre" or "Generales"
             const districtsWithEvents = [
                 ...new Set(
                     combinedData
                         .filter((vet) =>
                             vet.events.some(
                                 (event) =>
-                                    event.eventName === "Extracción de sangre" ||
-                                    event.eventName === "Generales"
+                                    event.eventName === "Vacunación y/o desparasitación"
                             )
                         )
                         .map((vet) => vet.district)
@@ -39,35 +38,35 @@ const ViewVaccination = () => {
             console.error("Error loading vet data:", error);
         } finally {
             setLoading(false);
-            setIsRefreshing(false); // Stop refreshing after data is loaded
+            setIsRefreshing(false); 
         }
     };
 
-    // Handle pull-to-refresh
+    // Refresh function to load data again
     const onRefresh = () => {
         setIsRefreshing(true);
-        loadVetData(); // Refetch the data
+        loadVetData(); 
     };
 
-    // Filter data by selected district
+    // Filter data based on selected district
     const filteredData = selectedDistrict
         ? vetData.filter((vet) => vet.district === selectedDistrict)
         : vetData;
 
-    // Transform data to include only events with "Extracción de sangre" or "Generales"
+    // Transform data to include only events related to "Vacunación y/o desparasitación"
     const transformedData = filteredData.flatMap((vet) =>
         vet.events
-            .filter((event) => event.eventName === "Extracción de sangre" || event.eventName === "Generales")
+            .filter((event) => event.eventName === "Vacunación y/o desparasitación")
             .map((event) => ({ ...event, vetName: vet.vetName, vet }))
     );
 
-    // Handle event click and save details
+    // Save event details when a user clicks on "Solicitar turno"
     const handleRequestAppointment = (eventName, schedulingUrl) => {
         console.log("Saving event details:", { eventName, schedulingUrl });
 
-        saveEventDetails(eventName, schedulingUrl);
+        saveEventDetails(eventName, schedulingUrl);  // Save event details in storage
 
-        // Retrieve saved event details to confirm they are saved correctly
+        // Retrieve saved event details to confirm it was saved
         getEventDetails().then((data) => {
             console.log("Retrieved saved event details:", data);
         }).catch((error) => {
@@ -75,6 +74,7 @@ const ViewVaccination = () => {
         });
 
         console.log(`Event details saved: Event - ${eventName}, URL - ${schedulingUrl}`);
+        router.push('pages/request-appointment'); // Navigate to appointment page
     };
 
     useEffect(() => {
@@ -96,7 +96,7 @@ const ViewVaccination = () => {
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
         >
             <Text className="text-2xl font-psemibold text-white text-center mb-4">
-                Extracción de Sangre
+                Vacunación y/o desparasitación
             </Text>
 
             {/* District Filter */}
@@ -109,13 +109,13 @@ const ViewVaccination = () => {
                     style={{
                         color: 'white',
                         backgroundColor: 'transparent',
-                        textAlign: 'center', // Center text for Android
-                        textAlignVertical: 'center', // Center text vertically for Android
+                        textAlign: 'center', 
+                        textAlignVertical: 'center', 
                     }}
                     itemStyle={{
-                        textAlign: 'center', // Center text for iOS
-                        color: 'white', // Ensure white text
-                        fontSize: 16, // Adjust font size for readability
+                        textAlign: 'center', 
+                        color: 'white', 
+                        fontSize: 16, 
                     }}
                 >
                     <Picker.Item label="Todos los Barrios" value="" />
@@ -125,7 +125,6 @@ const ViewVaccination = () => {
                 </Picker>
             </View>
 
-            {/* Display Transformed Data */}
             {transformedData.length > 0 ? (
                 transformedData.map((data, index) => (
                     <View key={index} className="bg-gray-600 rounded-lg p-4 mb-4 shadow-md">
@@ -146,19 +145,17 @@ const ViewVaccination = () => {
                         </Text>
                         <TouchableOpacity 
                             className="mt-4"
-                            onPress={() => handleRequestAppointment(data.eventName, data.schedulingUrl)} // Pass event details
+                            onPress={() => handleRequestAppointment(data.eventName, data.schedulingUrl)} // Save event details
                         >
-                            <Link href="pages/request-appointment">
-                                <Text className="text-blue-400 text-center font-pbold">
-                                    Solicitar turno
-                                </Text>
-                            </Link>
+                            <Text className="text-blue-400 text-center font-pbold">
+                                Solicitar turno
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 ))
             ) : (
                 <Text className="text-center text-sm text-white">
-                    No se encontraron Veterinarias con eventos de Vacunación y/o desparasitación.
+                    No se encontraron Veterinarias con turnos para Vacunación y/o desparasitación disponibles.
                 </Text>
             )}
         </ScrollView>

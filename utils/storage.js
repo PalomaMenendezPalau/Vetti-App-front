@@ -1,19 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Function to retrieve the stored user data
 export const getUserData = async () => {
   try {
     const userId = await AsyncStorage.getItem('user_id');
     const userRole = await AsyncStorage.getItem('user_role');
     const userEmail = await AsyncStorage.getItem('user_email');
     
-    return { userId, userRole, userEmail }; // Return the retrieved user data
+    return { userId, userRole, userEmail }; 
   } catch (error) {
     console.error('Error retrieving user data:', error);
   }
 };
 
-// Function to clear user data (for logging out, etc.)
 export const clearUserData = async () => {
   try {
     await AsyncStorage.removeItem('user_id');
@@ -25,10 +23,8 @@ export const clearUserData = async () => {
   }
 };
 
-// Function to save vet data into local storage
 export const saveVetData = async (vetData) => {
   try {
-    // Convert the vet data to a JSON string and save it
     await AsyncStorage.setItem('vet_data', JSON.stringify(vetData));
     console.log('Vet data saved successfully.');
   } catch (error) {
@@ -36,18 +32,17 @@ export const saveVetData = async (vetData) => {
   }
 };
 
-// Function to retrieve the vet data from local storage
 export const getVetData = async () => {
   try {
     const vetData = await AsyncStorage.getItem('vet_data');
-    return vetData ? JSON.parse(vetData) : null; // Parse and return the data if found
+    return vetData ? JSON.parse(vetData) : null; 
   } catch (error) {
     console.error('Error retrieving vet data:', error);
     return null;
   }
 };
 
-// Function to clear vet data
+
 export const clearVetData = async () => {
   try {
     await AsyncStorage.removeItem('vet_data');
@@ -63,8 +58,6 @@ export const saveEventDetails = async (eventName, schedulingUrl) => {
       eventName,
       schedulingUrl
     };
-
-    // Save the event details object in AsyncStorage
     await AsyncStorage.setItem('selected_event_details', JSON.stringify(eventDetails));
     console.log('Selected event details saved successfully.');
   } catch (error) {
@@ -72,23 +65,21 @@ export const saveEventDetails = async (eventName, schedulingUrl) => {
   }
 };
 
-// Function to retrieve the selected eventName and schedulingUrl
+
 export const getEventDetails = async () => {
   try {
     const eventDetails = await AsyncStorage.getItem('selected_event_details');
     
-    // If eventDetails is found, parse it into an object
     if (eventDetails) {
-      return JSON.parse(eventDetails); // Return the parsed object with both eventName and schedulingUrl
+      return JSON.parse(eventDetails); 
     }
-    return null; // If no data found, return null
+    return null;
   } catch (error) {
     console.error('Error retrieving selected event details:', error);
     return null;
   }
 };
 
-// Function to clear the selected event details
 export const clearEventDetails = async () => {
   try {
     await AsyncStorage.removeItem('selected_event_details');
@@ -107,18 +98,16 @@ export const saveEmailForPasswordReset = async (email) => {
   }
 };
 
-// Function to retrieve the saved email for password reset
 export const getEmailForPasswordReset = async () => {
   try {
     const email = await AsyncStorage.getItem('reset_password_email');
-    return email; // Return the saved email
+    return email; 
   } catch (error) {
     console.error('Error retrieving email for password reset:', error);
     return null;
   }
 };
 
-// Function to clear the saved email for password reset
 export const clearEmailForPasswordReset = async () => {
   try {
     await AsyncStorage.removeItem('reset_password_email');

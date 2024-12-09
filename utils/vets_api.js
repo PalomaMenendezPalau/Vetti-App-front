@@ -25,25 +25,22 @@ export const fetchVetEvents = async () => {
 
 export const fetchAndSaveCombinedVetData = async () => {
     try {
-        // Fetch data from both endpoints concurrently
         const [vets, events] = await Promise.all([fetchVets(), fetchVetEvents()]);
-
-        // Create a map of events grouped by vetName for efficient lookup
         const eventsByVetName = events.reduce((acc, event) => {
-            if (!acc[event.vetName]) {
-                acc[event.vetName] = [];
+            const vetNameLower = event.vetName.toLowerCase(); 
+            if (!acc[vetNameLower]) {
+                acc[vetNameLower] = [];
             }
-            acc[event.vetName].push(event); // Add event to the respective vetName key
+            acc[vetNameLower].push(event);
             return acc;
         }, {});
 
-        // Combine vets and their corresponding events
         const combinedData = vets.map((vet) => {
-            const vetEvents = eventsByVetName[vet.name] || []; // Default to empty array if no events
+            const vetNameLower = vet.name.toLowerCase(); 
+            const vetEvents = eventsByVetName[vetNameLower] || [];
             return { ...vet, events: vetEvents };
         });
 
-        // Save the combined data to local storage
         await saveVetData(combinedData);
 
         console.log("Combined vet data saved successfully:", JSON.stringify(combinedData, null, 2));

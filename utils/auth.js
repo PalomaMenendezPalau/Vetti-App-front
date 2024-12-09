@@ -13,10 +13,8 @@ export const getToken = async (email, password) => {
       audience: 'https://dev-k1n7shfb1jvuxkvz.us.auth0.com/api/v2/'
     });
 
-    // Assuming the response contains access_token and refresh_token
     const { access_token, refresh_token } = response.data;
 
-    // Store tokens securely
     await AsyncStorage.setItem('access_token', access_token);
     await AsyncStorage.setItem('refresh_token', refresh_token);
 

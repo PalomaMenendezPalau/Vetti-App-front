@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 import { useRouter } from 'expo-router';
-import { fetchUserDetails, deletePet } from '../../utils/users_api'; // Ensure the path is correct
-import { images, icons } from '../../constants'; // Assume you have dog, cat, and animal images in this module
+import { fetchUserDetails, deletePet } from '../../utils/users_api'; 
+import { images, icons } from '../../constants'; 
 
 const Pets = () => {
   const router = useRouter();
@@ -15,8 +15,8 @@ const Pets = () => {
     const loadPets = async () => {
       try {
         setLoading(true);
-        const userDetails = await fetchUserDetails(); // Fetch user details including pets
-        setPets(userDetails.pets || []); // Set the pets data
+        const userDetails = await fetchUserDetails(); 
+        setPets(userDetails.pets || []); 
       } catch (error) {
         console.error('Error fetching pets:', error.message);
       } finally {
@@ -41,15 +41,15 @@ const Pets = () => {
           style: "destructive",
           onPress: async () => {
             try {
-              setLoading(true); // Show loader while deleting
-              await deletePet(petId); // Call the delete API
-              setPets((prevPets) => prevPets.filter((pet) => pet.id !== petId)); // Update the state
+              setLoading(true); 
+              await deletePet(petId); 
+              setPets((prevPets) => prevPets.filter((pet) => pet.id !== petId));
               Alert.alert("Éxito", "Mascota eliminada correctamente.");
             } catch (error) {
               console.error("Error deleting pet:", error.message);
               Alert.alert("Error", "No se pudo eliminar la mascota. Inténtalo de nuevo.");
             } finally {
-              setLoading(false); // Hide loader
+              setLoading(false); 
             }
           },
         },
@@ -69,7 +69,6 @@ const Pets = () => {
   return (
     <SafeAreaView className="bg-gray-800 h-full -mt-2">
       <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 1 }}>
-        {/* Header */}
         <View className="w-full px-4 flex-row justify-between items-center">
           <Text className="text-xl font-semibold text-white">Mis Mascotas</Text>
           <Link href="../pages/pets" className="px-4 py-2 rounded-full bg-gray-200">
@@ -77,7 +76,6 @@ const Pets = () => {
           </Link>
         </View>
 
-        {/* Pets List */}
         <View className="w-full mt-4 px-1 space-y-3">
           {pets.map((pet, index) => (
             <View
@@ -85,14 +83,13 @@ const Pets = () => {
               className="flex-row items-center bg-gray-100 rounded-lg p-3 shadow-sm justify-between"
             >
               <View className="flex-row items-center">
-                {/* Conditional Image based on Pet Type */}
                 <Image
                   source={
                     pet.type.toLowerCase() === 'perro'
                       ? images.dog
                       : pet.type.toLowerCase() === 'gato'
                       ? images.cat
-                      : images.animal // Default image for 'Otro' or other types
+                      : images.animal 
                   }
                   className="w-14 h-14 rounded-full bg-gray-300"
                   resizeMode="cover"
@@ -116,8 +113,6 @@ const Pets = () => {
               </TouchableOpacity>
             </View>
           ))}
-
-          {/* Bottom Button */}
           <View className="p-4">
             <TouchableOpacity
               className="bg-secondary rounded-xl min-h-[62px] flex flex-row justify-center items-center"

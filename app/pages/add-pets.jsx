@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, Alert } from "react-native";
-import { addPet } from "../../utils/users_api"; // Ensure the path is correct
+import { addPet } from "../../utils/users_api"; 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const AddPet = () => {
     const [petName, setPetName] = useState("");
-    const [petType, setPetType] = useState("Perro"); // Default to "Perro"
-    const [petBirthday, setPetBirthday] = useState(""); // Formatted birthday
+    const [petType, setPetType] = useState("Perro"); 
+    const [petBirthday, setPetBirthday] = useState(""); 
     const [isLoading, setIsLoading] = useState(false);
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
@@ -15,30 +15,29 @@ const AddPet = () => {
     const onChange = (event, selectedDate) => {
         if (selectedDate) {
             const currentDate = selectedDate;
-            setShow(false); // Close the picker
-            setDate(currentDate); // Update picker state
-            const formattedDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-            setPetBirthday(formattedDate); // Save as string
-            console.log("Formatted Birthday:", formattedDate); // Debug log
+            setShow(false); 
+            setDate(currentDate); 
+            const formattedDate = currentDate.toISOString().split('T')[0]; 
+            setPetBirthday(formattedDate); 
+            console.log("Formatted Birthday:", formattedDate);
         } else {
-            setShow(false); // Close picker if dismissed
+            setShow(false); 
         }
     };
 
     const handleAddPet = async () => {
         if (!petName || !petType || !petBirthday) {
-            Alert.alert("Validation Error", "Por favor ingresar todos los campos solicitados.");
+            Alert.alert("Datos incompletos", "Por favor ingresar todos los campos solicitados.");
             return;
         }
     
         try {
             setIsLoading(true);
     
-            // Log the payload before sending the request
             console.log("Sending pet data:", {
                 name: petName,
                 type: petType,
-                birthday: petBirthday,  // Ensure it’s a valid string in YYYY-MM-DD format
+                birthday: petBirthday,  
             });
     
             const response = await addPet(petName, petType, petBirthday);
@@ -50,7 +49,7 @@ const AddPet = () => {
             console.error("Error adding pet:", error.response?.data || error.message);
             Alert.alert(
                 "Error",
-                error.response?.data?.message || "An error occurred while adding the pet."
+                error.response?.data?.message || "Ocurrio un error al agregar la mascota."
             );
         } finally {
             setIsLoading(false);
@@ -62,7 +61,6 @@ const AddPet = () => {
         <View className="flex-1 bg-gray-800 h-full pr-4 pl-4">
             <Text className="text-2xl font-psemibold text-white mt-4 mb-4">Agregar Mascota</Text>
 
-            {/* Pet Name */}
             <Text className="text-lg font-psemibold text-white mb-2">Nombre</Text>
             <TextInput
                 className="bg-gray-100 p-3 rounded-lg font-pregular text-gray-800 mb-4"
@@ -72,7 +70,6 @@ const AddPet = () => {
                 onChangeText={setPetName}
             />
 
-            {/* Pet Type (Radio Buttons) */}
             <Text className="text-lg font-psemibold text-white mb-2">Tipo de Especie</Text>
             <View className="flex-row justify-evenly mb-4">
                 <TouchableOpacity
@@ -101,7 +98,7 @@ const AddPet = () => {
                 </TouchableOpacity>
             </View>
 
-            {/* Pet Birthday */}
+
             <Text className="text-lg font-psemibold text-white mb-2">Fecha de Nacimiento</Text>
             <View className="items-center mb-6">
                 <TouchableOpacity
@@ -123,7 +120,6 @@ const AddPet = () => {
                 )}
             </View>
 
-            {/* Submit Button */}
             <TouchableOpacity
                 className="bg-secondary rounded-xl min-h-[62px] justify-center items-center text-white font-psemibold text-lg"
                 onPress={handleAddPet}

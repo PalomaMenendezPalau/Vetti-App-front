@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import {  useRouter } from 'expo-router'; 
-import { icons } from '../../constants'; // Assuming your icons are stored here
-
+import { icons } from '../../constants'; 
 const Vets = () => {
   const navigation = useNavigation(); 
   const router = useRouter();
@@ -17,7 +16,6 @@ const Vets = () => {
 
   return (
     <SafeAreaView className="bg-gray-800 h-full">
-      {/* Header */}
       <View className="flex-row items-center justify-between px-4 -mt-10">
         <TouchableOpacity onPress={() => navigation.jumpTo('home')}>
           <Text className="text-base font-pmedium text-white">{'<'}</Text>
@@ -26,7 +24,6 @@ const Vets = () => {
         <View />
       </View>
 
-      {/* Options */}
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {options.map((option, index) => (
           <TouchableOpacity onPress={() => router.push(option.section)}

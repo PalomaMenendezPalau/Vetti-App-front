@@ -12,22 +12,20 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('personalInfo');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false); // State to handle pull to refresh
+  const [isRefreshing, setIsRefreshing] = useState(false); 
   const navigation = useNavigation();
 
-  // Function to handle logout
   const handleLogout = async () => {
     try {
-      await clearUserData(); // Clear session data
+      await clearUserData(); 
       Alert.alert('Saliste de la cuenta', 'Has cerrado sesión con éxito.');
-      navigation.replace('index'); // Navigate to the login screen
+      navigation.replace('index'); 
     } catch (error) {
       console.error('Error al salir de tu cuenta:', error);
       Alert.alert('Error', 'A ocurrido un error al salir de tu cuenta.');
     }
   };
 
-  // Fetch user details when the component mounts
   const getUserDetails = async () => {
     try {
       const userDetails = await fetchUserDetails();
@@ -40,17 +38,15 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getUserDetails(); // Initial data load
+    getUserDetails();
   }, []);
 
-  // Pull-to-refresh handler
   const onRefresh = async () => {
     setIsRefreshing(true);
-    await getUserDetails(); // Re-fetch user details
-    setIsRefreshing(false); // Stop refreshing
+    await getUserDetails(); 
+    setIsRefreshing(false); 
   };
 
-  // Handle error state
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -65,10 +61,9 @@ const Profile = () => {
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 25, paddingBottom: 10 }}
         refreshControl={
-          <RefreshControl  refreshing={isRefreshing} onRefresh={onRefresh} /> // Add pull-to-refresh
+          <RefreshControl  refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Header */}
         <View className="flex-row justify-between items-center  mb-2">
           <Text className="text-2xl font-psemibold text-white">Mi Perfil</Text>
           <Link href="../pages/edit-profile" className="px-4 py-2 rounded-full bg-gray-200">
@@ -76,7 +71,6 @@ const Profile = () => {
           </Link>
         </View>
 
-        {/* Profile Picture and Name */}
         <View className="items-center mb-6">
           <Image
             source={images.profile}
@@ -91,7 +85,6 @@ const Profile = () => {
           </View>
         </View>
 
-        {/* Tabs */}
         <View className="flex-row justify-center mb-2 space-x-2">
           <TouchableOpacity
             onPress={() => setActiveTab('personalInfo')}
@@ -111,7 +104,6 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Conditional Content */}
         <View className="space-y-4">
           {activeTab === 'personalInfo' ? (
             <View className="space-y-4">

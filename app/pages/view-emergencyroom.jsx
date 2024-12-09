@@ -9,7 +9,7 @@ const ViewEmergencyroom = () => {
   const [loading, setLoading] = useState(true);
   const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
+  const [isRefreshing, setIsRefreshing] = useState(false); 
 
   useEffect(() => {
     const loadVets = async () => {
@@ -20,19 +20,18 @@ const ViewEmergencyroom = () => {
         setDistricts(uniqueDistricts);
 
         setVets(emergencyVets);
-        setFilteredVets(emergencyVets); // Set initial filtered list
+        setFilteredVets(emergencyVets); 
       } catch (error) {
         console.error('Error loading vets:', error);
       } finally {
         setLoading(false);
-        setIsRefreshing(false); // Stop refreshing once data is loaded
+        setIsRefreshing(false); 
       }
     };
 
     loadVets();
   }, []);
 
-  // Handle district filter change
   const handleDistrictChange = (district) => {
     setSelectedDistrict(district);
     if (district) {
@@ -42,7 +41,6 @@ const ViewEmergencyroom = () => {
     }
   };
 
-  // Handle pull-to-refresh
   const onRefresh = () => {
     setIsRefreshing(true);
     const loadVets = async () => {
@@ -53,18 +51,17 @@ const ViewEmergencyroom = () => {
         setDistricts(uniqueDistricts);
 
         setVets(emergencyVets);
-        setFilteredVets(emergencyVets); // Set initial filtered list
+        setFilteredVets(emergencyVets); 
       } catch (error) {
         console.error('Error loading vets:', error);
       } finally {
-        setIsRefreshing(false); // Stop refreshing once data is loaded
+        setIsRefreshing(false); 
       }
     };
 
     loadVets();
   };
 
-  // Render vet item in the list
   const renderVetItem = ({ item }) => (
     <View className="bg-gray-600 shadow-md rounded-lg p-4 mb-4">
       <Text className="text-lg text-white font-psemibold mb-2">{item.name}</Text>
@@ -79,7 +76,7 @@ const ViewEmergencyroom = () => {
     return (
       <View className="flex-1 justify-center items-center bg-gray-800">
         <ActivityIndicator size="large" color="#ffffff" />
-        <Text className="text-white mt-4">Loading vets...</Text>
+        <Text className="text-white mt-4">Cargando Veterinarias...</Text>
       </View>
     );
   }
@@ -99,13 +96,13 @@ const ViewEmergencyroom = () => {
             style={{
               color: 'white',
               backgroundColor: 'transparent',
-              textAlign: 'center', // Center text for Android
-              textAlignVertical: 'center', // Center text vertically for Android
+              textAlign: 'center', 
+              textAlignVertical: 'center', 
             }}
             itemStyle={{
-              textAlign: 'center', // Center text for iOS
-              color: 'white', // Ensure white text
-              fontSize: 16, // Adjust font size for readability
+              textAlign: 'center', 
+              color: 'white', 
+              fontSize: 16, 
             }}
           >
             <Picker.Item label="Todos los Barrios" value="" />
@@ -116,13 +113,12 @@ const ViewEmergencyroom = () => {
         </View>
       </View>
 
-      {/* FlatList with pull-to-refresh */}
       <FlatList
         data={filteredVets}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderVetItem}
         contentContainerStyle={{ padding: 10 }}
-        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} // Add refresh control here
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />} 
       />
     </View>
   );

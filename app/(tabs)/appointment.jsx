@@ -1,57 +1,52 @@
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { getActiveAppointments, cancelEvent } from '../../utils/users_api'; // Import the cancelEvent API function
+import { getActiveAppointments, cancelEvent } from '../../utils/users_api'; 
 
 const Appointment = () => {
   const navigation = useNavigation();
-  const [appointments, setAppointments] = useState([]); // State to store appointments
-  const [loading, setLoading] = useState(true); // State to manage loading
-  const [error, setError] = useState(null); // State to handle errors
-  const [isRefreshing, setIsRefreshing] = useState(false); // State to handle pull-to-refresh
+  const [appointments, setAppointments] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [isRefreshing, setIsRefreshing] = useState(false); 
 
-  // Fetch appointments function
   const fetchAppointments = async () => {
     try {
-      setLoading(true); // Set loading to true while fetching data
+      setLoading(true); 
       const data = await getActiveAppointments();
-      setAppointments(data); // Set fetched appointments
+      setAppointments(data); 
     } catch (err) {
       console.error('Error fetching appointments:', err);
       setError('Failed to load appointments. Please try again later.');
     } finally {
-      setLoading(false); // Stop loading spinner
+      setLoading(false); 
     }
   };
 
-  // Fetch appointments on load and on refresh
   useEffect(() => {
-    fetchAppointments(); // Fetch appointments when the component mounts
+    fetchAppointments(); 
   }, []);
 
-  // Function to handle pull-to-refresh
   const onRefresh = async () => {
-    setIsRefreshing(true); // Set refreshing to true
-    await fetchAppointments(); // Refetch appointments on pull-to-refresh
-    setIsRefreshing(false); // Stop refreshing once the data is fetched
+    setIsRefreshing(true); 
+    await fetchAppointments(); 
+    setIsRefreshing(false); 
   };
 
-  // Function to cancel the appointment
+
   const handleCancelAppointment = async (eventId) => {
     try {
-      const reason = " "; // Empty reason as specified in the request
+      const reason = "Cancelado por usuario"; 
       const response = await cancelEvent(eventId, reason);
       console.log('Appointment canceled:', response);
-      Alert.alert("Success", "Your appointment has been canceled.");
-      // Optionally, refresh the appointments after cancellation
+      Alert.alert("Éxito", "Tu turno fue cancelado");
       setAppointments(appointments.filter((appt) => appt.eventId !== eventId));
     } catch (error) {
       console.error('Error canceling appointment:', error);
-      Alert.alert("Error", "Failed to cancel your appointment. Please try again later.");
+      Alert.alert("Error", "Error al cancelar tu turno, porfavor intente nuevamente.");
     }
   };
 
-  // Handle error state
   if (error) {
     return (
       <View className="flex-1 justify-center items-center bg-gray-800">
@@ -63,12 +58,11 @@ const Appointment = () => {
     );
   }
 
-  // Handle loading state
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-gray-800">
         <ActivityIndicator size="large" color="#ffffff" />
-        <Text className="text-white mt-4">Loading appointments...</Text>
+        <Text className="text-white mt-4">Cargando turnos...</Text>
       </View>
     );
   }
@@ -102,7 +96,6 @@ const Appointment = () => {
         )}
       </ScrollView>
 
-      {/* Bottom Button */}
       <View className="p-4 mb-20">
         <TouchableOpacity
           className="bg-secondary rounded-xl min-h-[62px] flex flex-row justify-center items-center"

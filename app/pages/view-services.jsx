@@ -1,48 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native";
-import { fetchVetEvents } from "../../utils/vets_api"; // Assuming this function is available
+import { fetchVetEvents } from "../../utils/vets_api"; 
 import { useRouter } from 'expo-router';
-import { saveEventDetails } from "../../utils/storage"; // Import the function
+import { saveEventDetails } from "../../utils/storage"; 
 
 const ViewServices = () => {
     const [eventNames, setEventNames] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isRefreshing, setIsRefreshing] = useState(false); // State for pull-to-refresh
-    const router = useRouter(); // Initialize router for navigation
+    const [isRefreshing, setIsRefreshing] = useState(false); 
+    const router = useRouter();
 
-    // Function to fetch events and set state
+
     const loadEventNames = async () => {
         try {
             setLoading(true);
-            const events = await fetchVetEvents(); // Fetch vet events data
+            const events = await fetchVetEvents(); 
 
-            // Extract unique event names and schedulingUrls from the data
             const uniqueEvents = events.map((event) => ({
                 eventName: event.eventName,
-                schedulingUrl: event.schedulingUrl, // Assuming 'schedulingUrl' exists in the event data
+                schedulingUrl: event.schedulingUrl, 
             }));
 
-            // Remove duplicates based on the event name
             const uniqueEventNames = [
                 ...new Map(uniqueEvents.map((event) => [event.eventName, event])).values(),
             ];
 
-            setEventNames(uniqueEventNames); // Set unique event names to the state
+            setEventNames(uniqueEventNames); 
         } catch (error) {
             console.error("Error loading event names:", error);
         } finally {
             setLoading(false);
-            setIsRefreshing(false); // Stop refreshing
+            setIsRefreshing(false); 
         }
     };
 
-    // Refresh function triggered by pull-to-refresh
     const onRefresh = () => {
-        setIsRefreshing(true); // Start refreshing
-        loadEventNames(); // Refetch events
+        setIsRefreshing(true); 
+        loadEventNames(); 
     };
 
-    // Initial load
     useEffect(() => {
         loadEventNames();
     }, []);
@@ -68,14 +64,14 @@ const ViewServices = () => {
                 <Text className="font-pregular text-justify text-xl text-gray-100 text-white">Servicios Disponibles</Text> 
             </View>
 
-            {/* Display list of unique event names as TouchableOpacity */}
             {eventNames.length > 0 ? (
                 eventNames.map((event, index) => (
                     <TouchableOpacity
                         key={index}
                         onPress={() => {
-                            saveEventDetails(event.eventName, event.schedulingUrl); // Save the selected event name and scheduling URL
-                            router.push(`pages/view-available-services`);  // Navigate to event details page
+                            saveEventDetails(event.eventName, event.schedulingUrl); 
+                            console.log('Saved event details:',event.eventName, event.schedulingUrl)
+                            router.push(`pages/view-available-services`);  
                         }}
                         className="flex-row items-center justify-between rounded-lg p-4 mb-4 shadow-md bg-gray-600"
                     >

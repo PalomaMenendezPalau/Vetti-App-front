@@ -17,10 +17,8 @@ const SignUp = () => {
     role: '1',
   });
 
-  // State for loading and error handling
   const [isLoading, setIsLoading] = useState(false);
 
-  // Handle form submission
   const submit = async () => {
     const { name, lastName, dni, email, phoneNumber , password, role} = form;
 
@@ -30,11 +28,9 @@ const SignUp = () => {
     }
 
     try {
-      setIsLoading(true); // Set loading state to true
-      // Call the createUser function with form data
+      setIsLoading(true); 
       const response = await createUser(name, lastName, dni, email, phoneNumber, password, role)
 
-      // Show success message to the user
       Alert.alert('Éxito', 'Usuario creado exitosamente');
       setForm({
         name: '',
@@ -44,13 +40,12 @@ const SignUp = () => {
         phoneNumber:'',
         password: '',
         role:'1',
-      }); // Reset form
+      }); 
     } catch (error) {
-      // Handle error and show message to the user
       Alert.alert('Error', 'No se pudo crear el usuario. Inténtalo de nuevo.');
       console.error('User creation error:', error);
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false); 
     }
   };
 
