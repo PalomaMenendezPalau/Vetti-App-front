@@ -13,7 +13,6 @@ const ViewVaccination = () => {
     const [isRefreshing, setIsRefreshing] = useState(false); 
     const router = useRouter();
 
-    // Load vet data and filter based on event name
     const loadVetData = async () => {
         try {
             setLoading(true);

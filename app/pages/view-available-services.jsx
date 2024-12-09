@@ -78,9 +78,6 @@ const ViewAvailableServices = () => {
 
     return (
         <ScrollView className="flex-1 bg-gray-800 p-4">
-            <Text className="text-2xl font-semibold text-white text-center mb-4">
-                {selectedEventDetails?.eventName || "Evento no seleccionado"}
-            </Text>
 
             <View className="flex-row items-center justify-between px-4 mb-4 mt-4">
                 <TouchableOpacity onPress={() => router.push('pages/view-services')}>
