@@ -57,11 +57,8 @@ const ViewServices = () => {
             className="flex-1 bg-gray-800 p-4"
             refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
         >
-            <View className="flex-row items-center justify-between px-4 mb-4 mt-4">
-                <TouchableOpacity onPress={() => router.push('../(tabs)/vets')}>
-                    <Text className="text-base font-pmedium text-white">{'<'}</Text>
-                </TouchableOpacity>
-                <Text className="font-pregular text-justify text-xl text-gray-100 text-white">Servicios Disponibles</Text> 
+            <View className="px-4 mb-4 mt-4">
+                <Text className="font-psemibold text-center text-2xl text-gray-100 text-white">Servicios Disponibles</Text> 
             </View>
 
             {eventNames.length > 0 ? (

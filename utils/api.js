@@ -4,12 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const BASE_URL = 'https://vetti-app.onrender.com';
 const TOKEN_URL = 'https://dev-k1n7shfb1jvuxkvz.us.auth0.com/oauth/token';
 
-// Create an axios instance
 const api = axios.create({
   baseURL: BASE_URL,
 });
 
-// Interceptor to add token to every request
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('access_token');
@@ -23,7 +21,6 @@ api.interceptors.request.use(
   }
 );
 
-// Function to get a new access token
 const getNewToken = async () => {
   try {
     const response = await axios.post(TOKEN_URL, {
@@ -35,7 +32,6 @@ const getNewToken = async () => {
 
     const { access_token, expires_in } = response.data;
     
-    // Store the new access token and its expiration time
     await AsyncStorage.setItem('access_token', access_token);
 
     return access_token;
@@ -45,7 +41,6 @@ const getNewToken = async () => {
   }
 };
 
-// Response interceptor to handle token expiration
 api.interceptors.response.use(
   (response) => {
     return response;
@@ -53,7 +48,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // If token has expired (401 Unauthorized), request a new one
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newToken = await getNewToken();

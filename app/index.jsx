@@ -9,20 +9,20 @@ import { images, CustomButton, FormField } from '../constants'
 
 export default function Index() {
   return (
-    <SafeAreaView className="bg-slate-400 h-full">
+    <SafeAreaView className="bg-slate-400 flex-1 h-full">
         <ScrollView contentContainerStyle={{ height: '100%'}}>
-          <View className="w-full flex justify-center items-center min-h-[85vh] px-4 pt-48">
+          <View className="w-full flex justify-center items-center min-h-[85vh] px-4 pt-72">
             <Image
               source={images.logo}
-              className="w-[180px] h-[94px] absolute inset-x-30 top-0 "
+              className="w-[180px] h-[94px] absolute inset-x-30 top-0"
               resizeMode="contain"
             />
             <Image
               source={images.cards}
-              className="max-w-[380px] w-full h[300px] absolute mt-6  -bottom-24"
+              className="max-w-[380px] w-full h[300px] absolute mt-14  -bottom-32"
               resizeMode="contain"
             />
-              <View className="relative mt-9 pt-8">
+              <View className="relative mt-4 pt-8">
                 <Text className="text-3xl text-white font-bold text-center">
               Cuida a tu mascota{"\n"}
               de la mejor forma con{" "}
@@ -31,7 +31,7 @@ export default function Index() {
 
                  <Image
                    source={images.path}
-                    className="w-[136px] h-[15px] absolute -bottom-2 left-24"
+                    className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
                     resizeMode="contain"
                   />
               </View>
