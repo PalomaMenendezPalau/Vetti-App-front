@@ -16,14 +16,31 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const handleLogout = async () => {
-    try {
-      await clearUserData(); 
-      Alert.alert('Saliste de la cuenta', 'Has cerrado sesión con éxito.');
-      navigation.replace('index'); 
-    } catch (error) {
-      console.error('Error al salir de tu cuenta:', error);
-      Alert.alert('Error', 'A ocurrido un error al salir de tu cuenta.');
-    }
+    Alert.alert(
+      'Salir de la cuenta', // Title
+      '¿Estás seguro de que quieres cerrar sesión?', // Message
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmar',
+          onPress: async () => {
+            try {
+              await clearUserData(); 
+              Alert.alert('Saliste de la cuenta', 'Has cerrado sesión con éxito.');
+              navigation.replace('index'); 
+            } catch (error) {
+              console.error('Error al salir de tu cuenta:', error);
+              Alert.alert('Error', 'Ha ocurrido un error al salir de tu cuenta.');
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const getUserDetails = async () => {

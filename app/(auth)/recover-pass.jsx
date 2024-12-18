@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { requestPasswordReset } from '../../utils/users_api'; // Import the requestPasswordReset function
+import { requestPasswordReset } from '../../utils/users_api';
 import { images, CustomButton, FormField } from '../../constants';
-import { saveEmailForPasswordReset } from '../../utils/storage'; // Import the function to save email
+import { saveEmailForPasswordReset } from '../../utils/storage'; 
 
 const RecoverPassword = () => {
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [loading, setLoading] = useState(false); 
   const router = useRouter();
 
-  // Handle email input change
+
   const handleEmailChange = (text) => {
     setEmail(text);
   };
 
-  // Handle form submission
+
   const handleSubmit = async () => {
     if (!email) {
       Alert.alert('Error', 'Por favor ingresa tu correo electrónico.');
@@ -24,25 +24,24 @@ const RecoverPassword = () => {
     }
 
     try {
-      setLoading(true); // Show loading indicator when starting request
+      setLoading(true); 
 
-      // Save email for password reset
+
       await saveEmailForPasswordReset(email);
 
       console.log('Requesting password reset for:', email);
 
-      // Send password reset request
+
       await requestPasswordReset(email);
 
       console.log('Password reset request successful');
 
-      // On success, navigate to the recover-opt page
       router.push('/recover-otp');
     } catch (error) {
       console.error('Error during password reset request:', error);
       Alert.alert('Error', 'Hubo un problema al enviar el correo de recuperación.');
     } finally {
-      setLoading(false); // Hide loading indicator after the request
+      setLoading(false); 
     }
   };
 

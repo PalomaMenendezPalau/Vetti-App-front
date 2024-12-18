@@ -34,17 +34,34 @@ const Appointment = () => {
   };
 
 
-  const handleCancelAppointment = async (eventId) => {
-    try {
-      const reason = "Cancelado por usuario"; 
-      const response = await cancelEvent(eventId, reason);
-      console.log('Appointment canceled:', response);
-      Alert.alert("Éxito", "Tu turno fue cancelado");
-      setAppointments(appointments.filter((appt) => appt.eventId !== eventId));
-    } catch (error) {
-      console.error('Error canceling appointment:', error);
-      Alert.alert("Error", "Error al cancelar tu turno, porfavor intente nuevamente.");
-    }
+  const handleCancelAppointment = (eventId) => {
+    Alert.alert(
+      'Cancelar Turno', // Title
+      '¿Estás seguro de que quieres cancelar este turno?', // Message
+      [
+        {
+          text: 'No',
+          onPress: () => console.log('Cancelación abortada'),
+          style: 'cancel',
+        },
+        {
+          text: 'Sí, Cancelar',
+          onPress: async () => {
+            try {
+              const reason = "Cancelado por usuario"; 
+              const response = await cancelEvent(eventId, reason);
+              console.log('Appointment canceled:', response);
+              Alert.alert("Éxito", "Tu turno fue cancelado");
+              setAppointments(appointments.filter((appt) => appt.eventId !== eventId));
+            } catch (error) {
+              console.error('Error canceling appointment:', error);
+              Alert.alert("Error", "Error al cancelar tu turno, por favor intente nuevamente.");
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   if (error) {
